@@ -7,7 +7,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
-#include <QList>>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,13 +21,18 @@ public:
     QueryBuilder(QWidget *parent = nullptr);
     ~QueryBuilder();
 
-    bool readFile(QString path);
-    bool writeToFile();    
+    bool readFile();
+    bool writeToFile(QFile $file);
+    bool setPath(QString path);
     void split(QByteArray line);
     QString trim(QString s);
+
 
 private:
     Ui::MainWindow *ui;
     QList<QString> words;
+    QFile dataFile;
+    QString fileName;
+
 };
 #endif // QUERYBUILDER_H

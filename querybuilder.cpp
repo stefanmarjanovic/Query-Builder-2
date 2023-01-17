@@ -18,17 +18,14 @@ QueryBuilder::~QueryBuilder()
 *   READ FILE
 *   read the uploaded text file
 */
-bool QueryBuilder::readFile(QString path)
-{
-    QString fileName = path;
-    QFile file(fileName);
+bool QueryBuilder::readFile(){
 
-    if(file.open(QFile::ReadOnly | QFile::Text)){
+    if(dataFile.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "File found successfully./nReading file in progress/n";
 
-        while(!file.atEnd()){
+        while(!dataFile.atEnd()){
 
-            QByteArray line = file.readLine();
+            QByteArray line = dataFile.readLine();
             split(line);
 
         }
@@ -39,7 +36,7 @@ bool QueryBuilder::readFile(QString path)
 
     }
     else {
-        qCritical() << "File note found";
+        qCritical() << "File not found";
 
         return false;
     }
@@ -52,9 +49,21 @@ bool QueryBuilder::readFile(QString path)
 *   WRITE FILE
 *   write to the uploaded text file
 */
-bool QueryBuilder::writeToFile()
+bool QueryBuilder::writeToFile(QFile file)
 {
 
+    if(file.open(QFile::WriteOnly)){
+
+        QTextStream stream(&file);
+
+        stream << "Hello World";
+        file.rename(fileName);
+    }
+    else {
+        qCritical() << "File stream already closed";
+
+        return false;
+    }
 
     return true;
 }
@@ -93,6 +102,16 @@ void QueryBuilder::split(QByteArray line){
 
         w.append(c);                             //add letter to a word
     }
+
+}
+
+/*
+* SET FILEPATH
+* Define the location of the data file
+*/
+bool QueryBuilder::setPath(QString path){
+
+    fileName = path;
 
     return true;
 }
