@@ -7,12 +7,11 @@ int main(int argc, char *argv[])
     QueryBuilder w;
 
     w.show();
-    w.setPath("/Users/stefanmarjanovic/Git/Query Builder/suspects.txt");
+    //w.setPath("/Users/stefanmarjanovic/Git/Query Builder/suspects.txt");
+    w.setPath();
+    w.getPath();
 
-    //    QString fileName = "/Users/stefanmarjanovic/Git/Query Builder/suspects.txt";            //turn this into a variable
-    //QFile dataFile(fileName);
-
-    w.readFile();                        // read file
+    //w.readFile();                        // read file
 
     qDebug() << "Application Exited";
 

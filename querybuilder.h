@@ -23,16 +23,21 @@ public:
 
     bool readFile();
     bool writeToFile(QFile $file);
-    bool setPath(QString path);
+    bool setPath();
     void split(QByteArray line);
+    QString getPath();
     QString trim(QString s);
 
 
 private:
     Ui::MainWindow *ui;
     QList<QString> words;
-    QFile dataFile;
     QString fileName;
+
+public: slots:
+    void on_pushButton_clicked();
+
+signals:
 
 };
 #endif // QUERYBUILDER_H

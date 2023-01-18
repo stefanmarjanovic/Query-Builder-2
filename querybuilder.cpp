@@ -20,9 +20,14 @@ QueryBuilder::~QueryBuilder()
 */
 bool QueryBuilder::readFile(){
 
+    this->setPath();
+
+    QFile dataFile(fileName);
+
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "File found successfully./nReading file in progress/n";
 
+        // split by line
         while(!dataFile.atEnd()){
 
             QByteArray line = dataFile.readLine();
@@ -30,6 +35,7 @@ bool QueryBuilder::readFile(){
 
         }
 
+        //split by character
         for(int s = 0; s < words.size(); s++){
             qDebug() << words[s];
         }
@@ -80,8 +86,8 @@ QString QueryBuilder::trim(QString s){
 }
 
 /*
- * SPLIT LINE
-* Split line into words separated by comma
+*   SPLIT LINE
+*   Split line into words separated by comma
 */
 void QueryBuilder::split(QByteArray line){
      QString w;
@@ -106,12 +112,33 @@ void QueryBuilder::split(QByteArray line){
 }
 
 /*
-* SET FILEPATH
-* Define the location of the data file
+*   SET FILEPATH
+*   Define the location of the data file
 */
-bool QueryBuilder::setPath(QString path){
+bool QueryBuilder::setPath(){
 
-    fileName = path;
+    fileName = ui->filePath->text();
 
     return true;
 }
+
+
+/*
+*   RETURN FILEPATH
+*   retrieve the file path and print to console
+*/
+QString QueryBuilder::getPath(){
+
+    qDebug() << "Path : " << fileName;
+
+    return fileName;
+}
+
+void QueryBuilder::on_pushButton_clicked(){
+
+    //readFile();
+    ui->filePath->setText("Hello World");
+}
+
+
+
