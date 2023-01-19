@@ -1,5 +1,5 @@
 #include "querybuilder.h"
-#include "ui_mainwindow.h"
+#include "ui_querybuilder.h"
 
 QueryBuilder::QueryBuilder(QWidget *parent)
     : QMainWindow(parent)

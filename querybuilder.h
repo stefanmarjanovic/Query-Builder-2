@@ -34,7 +34,7 @@ private:
     QList<QString> words;
     QString fileName;
 
-public: slots:
+public slots:
     void on_pushButton_clicked();
 
 signals:
