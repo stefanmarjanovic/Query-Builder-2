@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QTextStream>
 #include <QList>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,7 +23,7 @@ public:
     ~QueryBuilder();
 
     bool readFile();
-    bool writeToFile(QFile $file);
+    bool writeToFile(QList<QString> words);
     bool setPath();
     void split(QByteArray line);
     QString getPath();
@@ -33,6 +34,7 @@ private:
     Ui::MainWindow *ui;
     QList<QString> words;
     QString fileName;
+    QMessageBox err;
 
 public slots:
     void on_pushButton_clicked();

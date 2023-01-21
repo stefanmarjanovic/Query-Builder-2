@@ -44,8 +44,13 @@ bool QueryBuilder::readFile(){
     else {
         qCritical() << "File not found";
 
+        err.setText("File not found. Please check your file path.");
+        err.exec();
+
         return false;
     }
+
+    writeToFile(words);
 
     return true;
 }
@@ -55,18 +60,25 @@ bool QueryBuilder::readFile(){
 *   WRITE FILE
 *   write to the uploaded text file
 */
-bool QueryBuilder::writeToFile(QFile file)
+bool QueryBuilder::writeToFile(QList<QString> words)
 {
+    QFile file;
+
 
     if(file.open(QFile::WriteOnly)){
 
         QTextStream stream(&file);
 
         stream << "Hello World";
-        file.rename(fileName);
+        file.setFileName("output.txt");
+        //  - /Users/stefanmarjanovic/Git/Query Builder/suspects.txt
     }
     else {
         qCritical() << "File stream already closed";
+
+        err.setText("File stream has been closed. Please contact your software engineer.");
+        err.exec();
+
 
         return false;
     }
@@ -118,6 +130,7 @@ void QueryBuilder::split(QByteArray line){
 bool QueryBuilder::setPath(){
 
     fileName = ui->filePath->text();
+    qDebug() << "Path : " << fileName;
 
     return true;
 }
@@ -136,8 +149,7 @@ QString QueryBuilder::getPath(){
 
 void QueryBuilder::on_pushButton_clicked(){
 
-    //readFile();
-    ui->filePath->setText("Hello World");
+    readFile();
 }
 
 
