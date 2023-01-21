@@ -18,6 +18,7 @@ QueryBuilder::~QueryBuilder()
 *   READ FILE
 *   read the uploaded text file
 */
+
 bool QueryBuilder::readFile(){
 
     this->setPath();
@@ -31,21 +32,16 @@ bool QueryBuilder::readFile(){
         while(!dataFile.atEnd()){
 
             QByteArray line = dataFile.readLine();
-            split(line);
+            splitLine(line);
 
-        }
-
-        //split by character
-        for(int s = 0; s < words.size(); s++){
-            qDebug() << words[s];
         }
 
     }
     else {
         qCritical() << "File not found";
 
-        err.setText("File not found. Please check your file path.");
-        err.exec();
+        alert.setText("File not found. Please check your file path.");
+        alert.exec();
 
         return false;
     }
@@ -60,24 +56,40 @@ bool QueryBuilder::readFile(){
 *   WRITE FILE
 *   write to the uploaded text file
 */
+
 bool QueryBuilder::writeToFile(QList<QString> words)
 {
-    QFile file;
+    QFile file("/Users/stefanmarjanovic/Git/Query Builder/output.txt");
 
 
-    if(file.open(QFile::WriteOnly)){
+    if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append)){
 
         QTextStream stream(&file);
 
-        stream << "Hello World";
-        file.setFileName("output.txt");
+        //stream << "Hello World";
+        qDebug() << "Printing Stream: ";
+
+        stream << "(";
+        for(int i = 0; i < words.size(); i++)
+        {
+            //wrap words with quotes
+            //check if integer or string
+            //words per line
+            stream << words[i] << "," << words[i+1] << "," << words[i+2] << "," << words[i+3] << "\n";
+            i += 3;
+        }
+        stream << ")";
+
         //  - /Users/stefanmarjanovic/Git/Query Builder/suspects.txt
+        file.close();
+        alert.setText("File exported successfully.");
+        alert.show();
     }
     else {
         qCritical() << "File stream already closed";
 
-        err.setText("File stream has been closed. Please contact your software engineer.");
-        err.exec();
+        alert.setText("File stream has been closed. Please contact your software engineer.");
+        alert.exec();
 
 
         return false;
@@ -91,6 +103,7 @@ bool QueryBuilder::writeToFile(QList<QString> words)
 *   TRIM STRING
 *   remove spaces from a word
 */
+
 QString QueryBuilder::trim(QString s){
    s.replace(" ","");
 
@@ -101,24 +114,28 @@ QString QueryBuilder::trim(QString s){
 *   SPLIT LINE
 *   Split line into words separated by comma
 */
-void QueryBuilder::split(QByteArray line){
+
+void QueryBuilder::splitLine(QByteArray line){
      QString w;
 
-    for(int i =0; i < line.size()-1; i++)
+
+    for(int i = 0; i < line.size(); i++)
     {
 
         QChar c = line[i];
 
-        if(c == ',') {                              //add word to arrayList
+        //add word to arrayList
+        if(c == ','|| i == line.size()-1) {
 
-            w.replace(" ","");                      //trim any white spaces
+            w.replace(" ","");                      // trim any white spaces
             words.append(w);
-            w.clear();                              //reset string for further usage
+            w.clear();                              // reset string for further usage
 
+            wordsPerLine++;                         // counter for words per line
             continue;
         }
 
-        w.append(c);                             //add letter to a word
+        w.append(c);                             // add letter to form a word
     }
 
 }
@@ -127,6 +144,7 @@ void QueryBuilder::split(QByteArray line){
 *   SET FILEPATH
 *   Define the location of the data file
 */
+
 bool QueryBuilder::setPath(){
 
     fileName = ui->filePath->text();
@@ -140,6 +158,7 @@ bool QueryBuilder::setPath(){
 *   RETURN FILEPATH
 *   retrieve the file path and print to console
 */
+
 QString QueryBuilder::getPath(){
 
     qDebug() << "Path : " << fileName;
@@ -147,10 +166,25 @@ QString QueryBuilder::getPath(){
     return fileName;
 }
 
+/*
+*   VALIDATE TYPE
+*   if string wrap in double quotes
+*/
+
+void QueryBuilder::validateTextString(QString w){
+
+      if(!w.toInt()) {
+
+          w.append('"');
+          w.prepend('"');
+
+      }
+
+}
+
 void QueryBuilder::on_pushButton_clicked(){
 
     readFile();
 }
-
 
 

@@ -25,16 +25,17 @@ public:
     bool readFile();
     bool writeToFile(QList<QString> words);
     bool setPath();
-    void split(QByteArray line);
     QString getPath();
     QString trim(QString s);
-
+    void splitLine(QByteArray line);
+    void validateTextString(QString w);
 
 private:
     Ui::MainWindow *ui;
     QList<QString> words;
+    int wordsPerLine = 0;
     QString fileName;
-    QMessageBox err;
+    QMessageBox alert;
 
 public slots:
     void on_pushButton_clicked();
