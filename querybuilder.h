@@ -23,17 +23,19 @@ public:
     ~QueryBuilder();
 
     bool readFile();
-    bool writeToFile(QList<QString> words);
+    bool writeToFile(QVector<QList<QString>> matrix);
     bool setPath();
     QString getPath();
     QString trim(QString s);
+    QString validateTextString(QString w);
     void splitLine(QByteArray line);
-    void validateTextString(QString w);
+    void debugMatrix(QVector<QList<QString>>);
 
 private:
     Ui::MainWindow *ui;
-    QList<QString> words;
-    int wordsPerLine = 0;
+    QVector<QList<QString>> matrix;
+    int wordCounter = 0;
+    int lineCounter = 0;
     QString fileName;
     QMessageBox alert;
 

@@ -34,6 +34,7 @@ bool QueryBuilder::readFile(){
             QByteArray line = dataFile.readLine();
             splitLine(line);
 
+            lineCounter++;
         }
 
     }
@@ -46,7 +47,7 @@ bool QueryBuilder::readFile(){
         return false;
     }
 
-    writeToFile(words);
+    writeToFile(matrix);
 
     return true;
 }
@@ -57,7 +58,7 @@ bool QueryBuilder::readFile(){
 *   write to the uploaded text file
 */
 
-bool QueryBuilder::writeToFile(QList<QString> words)
+bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
 {
     QFile file("/Users/stefanmarjanovic/Git/Query Builder/output.txt");
 
@@ -69,16 +70,17 @@ bool QueryBuilder::writeToFile(QList<QString> words)
         //stream << "Hello World";
         qDebug() << "Printing Stream: ";
 
-        stream << "(";
-        for(int i = 0; i < words.size(); i++)
+        qDebug() << "Words Per line: " << wordCounter;
+        qDebug() << "Lines: " << lineCounter;
+
+
+        for(int i = 0; i < lineCounter; i++)
         {
-            //wrap words with quotes
-            //check if integer or string
-            //words per line
-            stream << words[i] << "," << words[i+1] << "," << words[i+2] << "," << words[i+3] << "\n";
-            i += 3;
+            for(int o = 0; o < wordCounter; o++){
+
+                stream << matrix[i][o] << ",";
+            }
         }
-        stream << ")";
 
         //  - /Users/stefanmarjanovic/Git/Query Builder/suspects.txt
         file.close();
@@ -105,7 +107,8 @@ bool QueryBuilder::writeToFile(QList<QString> words)
 */
 
 QString QueryBuilder::trim(QString s){
-   s.replace(" ","");
+
+    s.replace(" ","");
 
    return s;
 }
@@ -117,27 +120,32 @@ QString QueryBuilder::trim(QString s){
 
 void QueryBuilder::splitLine(QByteArray line){
      QString w;
-
+     QList<QString> row;
 
     for(int i = 0; i < line.size(); i++)
     {
 
         QChar c = line[i];
 
+
         //add word to arrayList
         if(c == ','|| i == line.size()-1) {
 
             w.replace(" ","");                      // trim any white spaces
-            words.append(w);
+            //words.append(w);
+            row.append(w);
+
             w.clear();                              // reset string for further usage
 
-            wordsPerLine++;                         // counter for words per line
+            if(lineCounter == 0) wordCounter++;     // counter for words per line
             continue;
         }
 
         w.append(c);                             // add letter to form a word
     }
 
+    matrix.append(row);
+    debugMatrix(matrix);
 }
 
 /*
@@ -166,12 +174,13 @@ QString QueryBuilder::getPath(){
     return fileName;
 }
 
+
 /*
 *   VALIDATE TYPE
 *   if string wrap in double quotes
 */
 
-void QueryBuilder::validateTextString(QString w){
+QString QueryBuilder::validateTextString(QString w){
 
       if(!w.toInt()) {
 
@@ -180,11 +189,31 @@ void QueryBuilder::validateTextString(QString w){
 
       }
 
+      return w;
+}
+
+
+/*
+*   DEBUG 2D ARRAY
+*   print the matrix rows and columns to the console logging
+*/
+
+void  QueryBuilder::debugMatrix(QVector<QList<QString>> matrix){
+
+    qDebug() << "Matrix size: " << matrix.size();
+    for(int i = 0; i < matrix.size(); i++)
+     {
+         qDebug() << "Row " << i+1 << ": " << matrix[i];
+
+         for(int o = 0; o < matrix[i].size(); o++){
+
+            qDebug() << "Column " << o+1 << ": " << matrix[i][o];
+         }
+     }
 }
 
 void QueryBuilder::on_pushButton_clicked(){
 
     readFile();
 }
-
 
