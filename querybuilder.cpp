@@ -67,20 +67,18 @@ bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
 
         QTextStream stream(&file);
 
-        //stream << "Hello World";
-        qDebug() << "Printing Stream: ";
-
-        qDebug() << "Words Per line: " << wordCounter;
-        qDebug() << "Lines: " << lineCounter;
-
+        stream << "INSERT INTO ()\n";
 
         for(int i = 0; i < lineCounter; i++)
         {
+            stream << "VALUES (";
             for(int o = 0; o < wordCounter; o++){
 
-                stream << matrix[i][o] << ",";
+                (o != matrix[i].size()-1) ? (stream << validateTextString(trim(matrix[i][o])) << ",") : (stream << validateTextString(trim(matrix[i][o])));
             }
+            stream << "),\n";
         }
+        stream << ";";
 
         //  - /Users/stefanmarjanovic/Git/Query Builder/suspects.txt
         file.close();
@@ -88,9 +86,9 @@ bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
         alert.show();
     }
     else {
-        qCritical() << "File stream already closed";
+        qCritical() << "File stream is closed";
 
-        alert.setText("File stream has been closed. Please contact your software engineer.");
+        alert.setText("File stream is closed. Please contact your local software engineer.");
         alert.exec();
 
 
@@ -103,14 +101,12 @@ bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
 
 /*
 *   TRIM STRING
-*   remove spaces from a word
+*   remove trailing spaces from a word
 */
 
 QString QueryBuilder::trim(QString s){
 
-    s.replace(" ","");
-
-   return s;
+    return ((s[0] == ' ') || (s.back() == ' ')) ? s.replace(" ","") : s;
 }
 
 /*
@@ -131,8 +127,7 @@ void QueryBuilder::splitLine(QByteArray line){
         //add word to arrayList
         if(c == ','|| i == line.size()-1) {
 
-            w.replace(" ","");                      // trim any white spaces
-            //words.append(w);
+            trim(w);                      // trim any white spaces
             row.append(w);
 
             w.clear();                              // reset string for further usage
@@ -145,7 +140,7 @@ void QueryBuilder::splitLine(QByteArray line){
     }
 
     matrix.append(row);
-    debugMatrix(matrix);
+    //debugMatrix(matrix);
 }
 
 /*

@@ -1,3 +1,9 @@
+/*
+* Developed, owned and distributed by Stefan Marjanovic
+* This product is free for personal use but not for paid disgtribution.
+* Copyright stefanmarjanovic.com
+*/
+
 #include "querybuilder.h"
 #include <QApplication>
 

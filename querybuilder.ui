@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="inputLabel">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -34,7 +34,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>File path: </string>
+     <string>Input path: </string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
@@ -48,6 +48,29 @@
     </property>
     <property name="text">
      <string>Submit</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="outputLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Output path:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="outputPath">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>120</y>
+      <width>371</width>
+      <height>31</height>
+     </rect>
     </property>
    </widget>
   </widget>
