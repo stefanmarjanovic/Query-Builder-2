@@ -89,9 +89,9 @@ bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
         alert.show();
     }
     else {
-        qCritical() << "File stream is closed";
+        qCritical() << "Output path not set.";
 
-        alert.setText("File stream is closed. Please contact your local software engineer.");
+        alert.setText("Output path not set. Please enter a valid folder path and filename");
         alert.exec();
 
 
@@ -166,7 +166,7 @@ bool QueryBuilder::setPath(){
 *   Define the location of the data file
 */
 
-bool  QueryBuilder::setOutputPath(){
+bool QueryBuilder::setOutputPath(){
 
     outputFilename = ui->outputPath->text();
     qDebug() << "Output Path : " << outputFilename;
