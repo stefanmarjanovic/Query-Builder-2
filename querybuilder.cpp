@@ -23,7 +23,7 @@ bool QueryBuilder::readFile(){
 
     this->setPath();
 
-    QFile dataFile(fileName);
+    QFile dataFile(inputFilename);
 
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "File found successfully./nReading file in progress/n";
@@ -60,8 +60,11 @@ bool QueryBuilder::readFile(){
 
 bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
 {
-    QFile file("/Users/stefanmarjanovic/Git/Query Builder/output.txt");
+    //QFile file("/Users/Personal/Git/Query-Builder-2/output.txt");
 
+    this->setOutputPath();
+
+    QFile file(outputFilename);
 
     if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append)){
 
@@ -143,6 +146,7 @@ void QueryBuilder::splitLine(QByteArray line){
     //debugMatrix(matrix);
 }
 
+
 /*
 *   SET FILEPATH
 *   Define the location of the data file
@@ -150,8 +154,22 @@ void QueryBuilder::splitLine(QByteArray line){
 
 bool QueryBuilder::setPath(){
 
-    fileName = ui->filePath->text();
-    qDebug() << "Path : " << fileName;
+    inputFilename = ui->inputPath->text();
+    qDebug() << "Path : " << inputFilename;
+
+    return true;
+}
+
+
+/*
+*   SET OUTPUT FILEPATH
+*   Define the location of the data file
+*/
+
+bool  QueryBuilder::setOutputPath(){
+
+    outputFilename = ui->outputPath->text();
+    qDebug() << "Output Path : " << outputFilename;
 
     return true;
 }
@@ -164,9 +182,9 @@ bool QueryBuilder::setPath(){
 
 QString QueryBuilder::getPath(){
 
-    qDebug() << "Path : " << fileName;
+    qDebug() << "Path : " << inputFilename;
 
-    return fileName;
+    return inputFilename;
 }
 
 

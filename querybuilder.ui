@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="filePath">
+   <widget class="QLineEdit" name="inputPath">
     <property name="geometry">
      <rect>
       <x>100</x>

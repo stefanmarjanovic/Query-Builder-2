@@ -1,0 +1,4 @@
+INSERT INTO ()
+VALUES ("Victor Sanchez",24,"male","builder"),
+VALUES ("Romario Balencia",54,"male","carpenter"),
+;

@@ -25,6 +25,7 @@ public:
     bool readFile();
     bool writeToFile(QVector<QList<QString>> matrix);
     bool setPath();
+    bool setOutputPath();
     QString getPath();
     QString trim(QString s);
     QString validateTextString(QString w);
@@ -36,7 +37,8 @@ private:
     QVector<QList<QString>> matrix;
     int wordCounter = 0;
     int lineCounter = 0;
-    QString fileName;
+    QString inputFilename;
+    QString outputFilename;
     QMessageBox alert;
 
 public slots:
