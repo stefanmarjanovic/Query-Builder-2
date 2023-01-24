@@ -11,10 +11,12 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    querybuilder.cpp
+    querybuilder.cpp \
+    statements.cpp
 
 HEADERS += \
-    querybuilder.h
+    querybuilder.h \
+    statements.h
 
 FORMS += \
     querybuilder.ui
