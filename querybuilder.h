@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QTextStream>
-#include <QFileDialog>
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
@@ -28,23 +27,26 @@ public:
     bool setOutputPath();
     QString getPath();
     QString trim(QString s);
-    QString validateTextString(QString w);
     void splitLine(QByteArray line);
     void debugMatrix(QVector<QList<QString>>);
 
 private:
     Ui::MainWindow *ui;
     QVector<QList<QString>> matrix;
-    int wordCounter = 0;
-    int lineCounter = 0;
+    int wordCounter;
+    int lineCounter;
+    int querySelector;
     QString inputFilename;
     QString outputFilename;
     QMessageBox alert;
 
-public slots:
-    void on_pushButton_clicked();
-
 signals:
 
+private slots:
+    void on_submitBtn_clicked();
+    void on_alterBtn_clicked();
+    void on_deleteBtn_clicked();
+    void on_insertBtn_clicked();
+    void on_updateBtn_clicked();
 };
 #endif // QUERYBUILDER_H

@@ -1,4 +1,5 @@
 #include "querybuilder.h"
+#include "statements.h"
 #include "ui_querybuilder.h"
 
 QueryBuilder::QueryBuilder(QWidget *parent)
@@ -6,12 +7,16 @@ QueryBuilder::QueryBuilder(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    wordCounter = 0;
+    lineCounter = 0;
+    querySelector = -1;
 }
 
 QueryBuilder::~QueryBuilder()
 {
     delete ui;
 }
+
 
 
 /*
@@ -53,6 +58,7 @@ bool QueryBuilder::readFile(){
 }
 
 
+
 /*
 *   WRITE FILE
 *   write to the uploaded text file
@@ -60,31 +66,20 @@ bool QueryBuilder::readFile(){
 
 bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
 {
-    //QFile file("/Users/Personal/Git/Query-Builder-2/output.txt");
+
+    statements s;
 
     this->setOutputPath();
 
     QFile file(outputFilename);
 
+
     if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append)){
 
-        QTextStream stream(&file);
+        s.insertStatement(matrix, lineCounter,wordCounter, file);
+        //s.updateStatement(matrix, lineCounter,wordCounter, file);
 
-        stream << "INSERT INTO ()\n";
-
-        for(int i = 0; i < lineCounter; i++)
-        {
-            stream << "VALUES (";
-            for(int o = 0; o < wordCounter; o++){
-
-                (o != matrix[i].size()-1) ? (stream << validateTextString(trim(matrix[i][o])) << ",") : (stream << validateTextString(trim(matrix[i][o])));
-            }
-            stream << "),\n";
-        }
-        stream << ";";
-
-        //  - /Users/stefanmarjanovic/Git/Query Builder/suspects.txt
-        file.close();
+        //  - /Users/Personal/Git/query-builder-2/suspects.txt
         alert.setText("File exported successfully.");
         alert.show();
     }
@@ -102,21 +97,22 @@ bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
 }
 
 
+
 /*
 *   TRIM STRING
 *   remove trailing spaces from a word
 */
-
 QString QueryBuilder::trim(QString s){
 
     return ((s[0] == ' ') || (s.back() == ' ')) ? s.replace(" ","") : s;
 }
 
+
+
 /*
 *   SPLIT LINE
 *   Split line into words separated by comma
 */
-
 void QueryBuilder::splitLine(QByteArray line){
      QString w;
      QList<QString> row;
@@ -130,7 +126,7 @@ void QueryBuilder::splitLine(QByteArray line){
         //add word to arrayList
         if(c == ','|| i == line.size()-1) {
 
-            trim(w);                      // trim any white spaces
+            trim(w);                                // trim any white spaces
             row.append(w);
 
             w.clear();                              // reset string for further usage
@@ -139,7 +135,7 @@ void QueryBuilder::splitLine(QByteArray line){
             continue;
         }
 
-        w.append(c);                             // add letter to form a word
+        w.append(c);                                // add letter to form a word
     }
 
     matrix.append(row);
@@ -147,11 +143,11 @@ void QueryBuilder::splitLine(QByteArray line){
 }
 
 
+
 /*
 *   SET FILEPATH
 *   Define the location of the data file
 */
-
 bool QueryBuilder::setPath(){
 
     inputFilename = ui->inputPath->text();
@@ -161,11 +157,11 @@ bool QueryBuilder::setPath(){
 }
 
 
+
 /*
 *   SET OUTPUT FILEPATH
 *   Define the location of the data file
 */
-
 bool QueryBuilder::setOutputPath(){
 
     outputFilename = ui->outputPath->text();
@@ -175,11 +171,11 @@ bool QueryBuilder::setOutputPath(){
 }
 
 
+
 /*
 *   RETURN FILEPATH
 *   retrieve the file path and print to console
 */
-
 QString QueryBuilder::getPath(){
 
     qDebug() << "Path : " << inputFilename;
@@ -188,29 +184,11 @@ QString QueryBuilder::getPath(){
 }
 
 
-/*
-*   VALIDATE TYPE
-*   if string wrap in double quotes
-*/
-
-QString QueryBuilder::validateTextString(QString w){
-
-      if(!w.toInt()) {
-
-          w.append('"');
-          w.prepend('"');
-
-      }
-
-      return w;
-}
-
 
 /*
 *   DEBUG 2D ARRAY
 *   print the matrix rows and columns to the console logging
 */
-
 void  QueryBuilder::debugMatrix(QVector<QList<QString>> matrix){
 
     qDebug() << "Matrix size: " << matrix.size();
@@ -225,8 +203,38 @@ void  QueryBuilder::debugMatrix(QVector<QList<QString>> matrix){
      }
 }
 
-void QueryBuilder::on_pushButton_clicked(){
 
+
+void QueryBuilder::on_submitBtn_clicked()
+{
     readFile();
+}
+
+
+void QueryBuilder::on_alterBtn_clicked()
+{
+    querySelector = 1;
+    qDebug() << "Query Selector: " << querySelector;
+}
+
+
+void QueryBuilder::on_deleteBtn_clicked()
+{
+    querySelector = 2;
+    qDebug() << "Query Selector: " << querySelector;
+}
+
+
+void QueryBuilder::on_insertBtn_clicked()
+{
+    querySelector = 3;
+    qDebug() << "Query Selector: " << querySelector;
+}
+
+
+void QueryBuilder::on_updateBtn_clicked()
+{
+    querySelector = 4;
+    qDebug() << "Query Selector: " << querySelector;
 }
 

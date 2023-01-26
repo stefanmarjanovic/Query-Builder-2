@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>80</y>
+      <y>30</y>
       <width>371</width>
       <height>31</height>
      </rect>
@@ -27,62 +27,131 @@
    <widget class="QLabel" name="inputLabel">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>80</y>
-      <width>61</width>
+      <x>20</x>
+      <y>30</y>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Input path: </string>
+     <string>Data Source:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="submitBtn">
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>260</y>
+      <y>270</y>
       <width>100</width>
       <height>32</height>
      </rect>
     </property>
     <property name="text">
-     <string>Submit</string>
+     <string>Generate</string>
     </property>
    </widget>
    <widget class="QLabel" name="outputLabel">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>120</y>
-      <width>71</width>
-      <height>16</height>
+      <y>75</y>
+      <width>81</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Output path:</string>
+     <string>Data Output:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="outputPath">
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>120</y>
+      <y>70</y>
       <width>371</width>
       <height>31</height>
      </rect>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>493</width>
-     <height>24</height>
-    </rect>
-   </property>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>110</y>
+      <width>371</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Query Selector:</string>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>10</y>
+       <width>311</width>
+       <height>66</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="6">
+       <widget class="QPushButton" name="updateBtn">
+        <property name="text">
+         <string>Update</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QPushButton" name="insertBtn">
+        <property name="text">
+         <string>Insert</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QPushButton" name="deleteBtn">
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="alterBtn">
+        <property name="text">
+         <string>Alter</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="addColBtn">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>270</y>
+      <width>100</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add Columns</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addWhereBtn">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>270</y>
+      <width>100</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Where Clause</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
