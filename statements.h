@@ -1,14 +1,9 @@
 #ifndef STATEMENTS_H
 #define STATEMENTS_H
 
-#include <QMainWindow>
-#include <QObject>
-#include <QWidget>
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
-#include <QList>
-#include <QMessageBox>
 
 class statements
 {
@@ -19,7 +14,7 @@ public:
     bool deleteStatement(QList<QString> data, int lineCounter, int wordCounter, QFile &file);
     bool insertStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
     bool updateStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
-    QString setWhere(QVector<QString> columns, QString s);
+    QString setWhere(QString s);
     QString validateTextString(QString w);
 
 private:

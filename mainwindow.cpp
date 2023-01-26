@@ -1,8 +1,10 @@
-#include "querybuilder.h"
+#include "mainwindow.h"
 #include "statements.h"
+#include "data.h"
 #include "ui_querybuilder.h"
 
-QueryBuilder::QueryBuilder(QWidget *parent)
+
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -12,7 +14,7 @@ QueryBuilder::QueryBuilder(QWidget *parent)
     querySelector = -1;
 }
 
-QueryBuilder::~QueryBuilder()
+MainWindow::~MainWindow()
 {
     delete ui;
 }
@@ -24,9 +26,9 @@ QueryBuilder::~QueryBuilder()
 *   read the uploaded text file
 */
 
-bool QueryBuilder::readFile(){
+bool MainWindow::readFile(){
 
-    this->setPath();
+    this->getPath();
 
     QFile dataFile(inputFilename);
 
@@ -64,20 +66,41 @@ bool QueryBuilder::readFile(){
 *   write to the uploaded text file
 */
 
-bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
+bool MainWindow::writeToFile(QVector<QList<QString>> matrix)
 {
 
     statements s;
 
-    this->setOutputPath();
+    this->getOutputPath();
 
     QFile file(outputFilename);
 
 
     if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append)){
 
-        s.insertStatement(matrix, lineCounter,wordCounter, file);
-        //s.updateStatement(matrix, lineCounter,wordCounter, file);
+        switch(querySelector){
+            case 1:
+
+                qDebug() << "Alter Statement";
+                break;
+
+            case 2:
+
+                qDebug() << "Delete Statement";
+                break;
+
+            case 3:
+
+                s.insertStatement(matrix, lineCounter,wordCounter, file);
+                qDebug() << "Insert Statement";
+                break;
+
+            case 4:
+
+                s.updateStatement(matrix, lineCounter,wordCounter, file);
+                qDebug() << "Update Statement";
+                break;
+        }
 
         //  - /Users/Personal/Git/query-builder-2/suspects.txt
         alert.setText("File exported successfully.");
@@ -102,7 +125,7 @@ bool QueryBuilder::writeToFile(QVector<QList<QString>> matrix)
 *   TRIM STRING
 *   remove trailing spaces from a word
 */
-QString QueryBuilder::trim(QString s){
+QString MainWindow::trim(QString s){
 
     return ((s[0] == ' ') || (s.back() == ' ')) ? s.replace(" ","") : s;
 }
@@ -113,7 +136,7 @@ QString QueryBuilder::trim(QString s){
 *   SPLIT LINE
 *   Split line into words separated by comma
 */
-void QueryBuilder::splitLine(QByteArray line){
+void MainWindow::splitLine(QByteArray line){
      QString w;
      QList<QString> row;
 
@@ -148,12 +171,13 @@ void QueryBuilder::splitLine(QByteArray line){
 *   SET FILEPATH
 *   Define the location of the data file
 */
-bool QueryBuilder::setPath(){
+QString MainWindow::getPath(){
 
     inputFilename = ui->inputPath->text();
-    qDebug() << "Path : " << inputFilename;
 
-    return true;
+    qDebug() << "File Input Path: " << ui->inputPath->text();
+
+    return inputFilename;
 }
 
 
@@ -162,25 +186,13 @@ bool QueryBuilder::setPath(){
 *   SET OUTPUT FILEPATH
 *   Define the location of the data file
 */
-bool QueryBuilder::setOutputPath(){
+QString MainWindow::getOutputPath(){
 
     outputFilename = ui->outputPath->text();
-    qDebug() << "Output Path : " << outputFilename;
 
-    return true;
-}
+    qDebug() << "File Output Path: " << ui->outputPath->text();
 
-
-
-/*
-*   RETURN FILEPATH
-*   retrieve the file path and print to console
-*/
-QString QueryBuilder::getPath(){
-
-    qDebug() << "Path : " << inputFilename;
-
-    return inputFilename;
+    return outputFilename;
 }
 
 
@@ -189,7 +201,7 @@ QString QueryBuilder::getPath(){
 *   DEBUG 2D ARRAY
 *   print the matrix rows and columns to the console logging
 */
-void  QueryBuilder::debugMatrix(QVector<QList<QString>> matrix){
+void  MainWindow::debugMatrix(QVector<QList<QString>> matrix){
 
     qDebug() << "Matrix size: " << matrix.size();
     for(int i = 0; i < matrix.size(); i++)
@@ -205,36 +217,81 @@ void  QueryBuilder::debugMatrix(QVector<QList<QString>> matrix){
 
 
 
-void QueryBuilder::on_submitBtn_clicked()
+/*
+*   ALERT MESSAGE BOX
+*   call this function to alert the user of any issues
+*/
+void MainWindow::setAlert(QString s){
+
+    alert.setText(s);
+    alert.show();
+}
+
+void MainWindow::setButtonChecked(int querySelection){
+
+    switch(querySelection){
+        case 1: // Alter
+            ui->deleteBtn->setChecked(0);
+            ui->insertBtn->setChecked(0);
+            ui->updateBtn->setChecked(0);
+            ui->alterBtn->setChecked(1);
+            break;
+
+        case 2: // Delete
+            ui->deleteBtn->setChecked(1);
+            ui->insertBtn->setChecked(0);
+            ui->updateBtn->setChecked(0);
+            ui->alterBtn->setChecked(0);
+
+            break;
+        case 3: // Insert
+            ui->deleteBtn->setChecked(0);
+            ui->insertBtn->setChecked(1);
+            ui->updateBtn->setChecked(0);
+            ui->alterBtn->setChecked(0);
+
+            break;
+        case 4:  // Update
+            ui->deleteBtn->setChecked(0);
+            ui->insertBtn->setChecked(0);
+            ui->updateBtn->setChecked(1);
+            ui->alterBtn->setChecked(0);
+            break;
+    }
+}
+
+void MainWindow::on_submitBtn_clicked()
 {
-    readFile();
+    class data d;
+
+    d.readFile();
 }
 
 
-void QueryBuilder::on_alterBtn_clicked()
+void MainWindow::on_alterBtn_clicked()
 {
     querySelector = 1;
-    qDebug() << "Query Selector: " << querySelector;
+    setButtonChecked(querySelector);
 }
 
 
-void QueryBuilder::on_deleteBtn_clicked()
+void MainWindow::on_deleteBtn_clicked()
 {
     querySelector = 2;
-    qDebug() << "Query Selector: " << querySelector;
+    setButtonChecked(querySelector);
 }
 
 
-void QueryBuilder::on_insertBtn_clicked()
+void MainWindow::on_insertBtn_clicked()
 {
     querySelector = 3;
-    qDebug() << "Query Selector: " << querySelector;
+    setButtonChecked(querySelector);
 }
 
 
-void QueryBuilder::on_updateBtn_clicked()
+void MainWindow::on_updateBtn_clicked()
 {
     querySelector = 4;
-    qDebug() << "Query Selector: " << querySelector;
+    setButtonChecked(querySelector);
 }
 

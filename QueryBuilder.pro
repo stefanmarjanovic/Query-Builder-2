@@ -10,16 +10,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    data.cpp \
     main.cpp \
-    querybuilder.cpp \
+    mainwindow.cpp \
     statements.cpp
 
 HEADERS += \
-    querybuilder.h \
+    data.h \
+    mainwindow.h \
     statements.h
 
 FORMS += \
-    querybuilder.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

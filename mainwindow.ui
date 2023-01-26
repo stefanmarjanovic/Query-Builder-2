@@ -97,8 +97,17 @@
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="6">
        <widget class="QPushButton" name="updateBtn">
+        <property name="accessibleName">
+         <string/>
+        </property>
         <property name="text">
          <string>Update</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -107,6 +116,9 @@
         <property name="text">
          <string>Insert</string>
         </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="0" column="4">
@@ -114,12 +126,18 @@
         <property name="text">
          <string>Delete</string>
         </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="0" column="3">
        <widget class="QPushButton" name="alterBtn">
         <property name="text">
          <string>Alter</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

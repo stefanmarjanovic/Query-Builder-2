@@ -13,23 +13,23 @@ statements::statements()
 /*
 *   MYSQL ALTER STATEMENT
 *
-*/
+
 bool statements::alterStatement(QList<QString> data, int lineCounter, int wordCounter, QFile &file){
 
 
 }
-
+*/
 
 
 /*
 *   MYSQL DELETE STATEMENT
 *
-*/
+
 bool statements::deleteStatement(QList<QString> data, int lineCounter, int wordCounter, QFile &file){
 
 
 }
-
+*/
 
 
 /*
@@ -81,10 +81,10 @@ bool statements::updateStatement(QVector<QList<QString>> data, int lineCounter, 
         }
 
         stream << "\n"<< _where <<" \n;\n";
-        //(i == lineCounter-1) ? (stream << ")") : (stream << "WHERE \n");
     }
 
-    //WHERE (if $where instantiated)
+    //If where clause is instantied
+    (_where != "WHERE ") ? stream << _where : stream << "";
 
     stream << "\n";
     file.close();
@@ -98,7 +98,7 @@ bool statements::updateStatement(QVector<QList<QString>> data, int lineCounter, 
 *   SET WHERE CLAUSE
 *   set a where clause to return
 */
-QString setWhere(QVector<QString> columns, QString s){
+QString setWhere(QString s){
 
     s = NULL;
 
