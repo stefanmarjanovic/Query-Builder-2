@@ -7,11 +7,11 @@
 #include <QDebug>
 #include <QList>
 
-class data
+class Data
 {
 public:
 
-    data();
+    Data();
     bool readFile();
     bool writeToFile(QVector<QList<QString>> data);
     QString trim(QString s);

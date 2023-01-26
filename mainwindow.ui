@@ -34,7 +34,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Data Source:</string>
+     <string>Data Input:</string>
     </property>
    </widget>
    <widget class="QPushButton" name="submitBtn">
@@ -83,15 +83,15 @@
      </rect>
     </property>
     <property name="title">
-     <string>Query Selector:</string>
+     <string>Statement selector:</string>
     </property>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>10</y>
+       <y>25</y>
        <width>311</width>
-       <height>66</height>
+       <height>31</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">

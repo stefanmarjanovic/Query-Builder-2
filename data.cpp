@@ -1,7 +1,7 @@
 #include "data.h"
 #include "statements.h"
 
-data::data()
+Data::Data()
 {
     wordCounter = 0;
     lineCounter = 0;
@@ -14,7 +14,7 @@ data::data()
 *   read the uploaded text file
 */
 
-bool data::readFile(){
+bool Data::readFile(){
 
     QFile dataFile(interface.getPath());
 
@@ -51,7 +51,7 @@ bool data::readFile(){
 *   write to the uploaded text file
 */
 
-bool data::writeToFile(QVector<QList<QString>> data)
+bool Data::writeToFile(QVector<QList<QString>> data)
 {
 
     statements s;
@@ -105,7 +105,7 @@ bool data::writeToFile(QVector<QList<QString>> data)
 *   TRIM STRING
 *   remove trailing spaces from a word
 */
-QString data::trim(QString s){
+QString Data::trim(QString s){
 
     return ((s[0] == ' ') || (s.back() == ' ')) ? s.replace(" ","") : s;
 }
@@ -115,7 +115,7 @@ QString data::trim(QString s){
 *   SPLIT LINE
 *   Split line into words separated by comma
 */
-void data::splitLine(QByteArray line){
+void Data::splitLine(QByteArray line){
 
     QString w;
      QList<QString> row;
@@ -150,7 +150,7 @@ void data::splitLine(QByteArray line){
 *   DEBUG 2D ARRAY
 *   print the matrix rows and columns to the console logging
 */
-void  data::debugMatrix(QVector<QList<QString>> matrix){
+void  Data::debugMatrix(QVector<QList<QString>> matrix){
 
     qDebug() << "Matrix size: " << matrix.size();
     for(int i = 0; i < matrix.size(); i++)

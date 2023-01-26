@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "statements.h"
-#include "data.h"
 #include "ui_querybuilder.h"
 
 
@@ -262,9 +261,7 @@ void MainWindow::setButtonChecked(int querySelection){
 
 void MainWindow::on_submitBtn_clicked()
 {
-    class data d;
-
-    d.readFile();
+    this->readFile();
 }
 
 
