@@ -1,17 +1,22 @@
 #ifndef DATA_H
 #define DATA_H
-
+#include "statements.h"
 #include "mainwindow.h"
 #include <QTextStream>
 #include <QFile>
 #include <QDebug>
 #include <QList>
+#include <QObject>
 
-class Data
+class Data : public QObject
 {
+
+   Q_OBJECT
+
 public:
 
-    Data();
+    Data(MainWindow &u);
+    ~Data();
     bool readFile();
     bool writeToFile(QVector<QList<QString>> data);
     QString trim(QString s);
@@ -19,7 +24,8 @@ public:
     void debugMatrix(QVector<QList<QString>> data);
 
 private:
-    MainWindow interface;
+    MainWindow *ui;
+    Statements s;
     QVector<QList<QString>> matrix;
     int wordCounter;
     int lineCounter;

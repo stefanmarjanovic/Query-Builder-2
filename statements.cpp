@@ -1,42 +1,52 @@
 #include "statements.h"
 
-statements::statements()
+Statements::Statements()
 {
-    _alter = "ALTER TABLE {table_name}\n";
+    _delete = "DELETE FROM {table_name}\n";
     _insert = "INSERT INTO  {table_name}()\n";
     _update = "UPDATE {table_name}\n";
-    _where = "WHERE ";
-    _value = "VALUES ";
+    _value  = "VALUES ";
 }
 
+Statements::~Statements(){
 
-/*
-*   MYSQL ALTER STATEMENT
-*
-
-bool statements::alterStatement(QList<QString> data, int lineCounter, int wordCounter, QFile &file){
-
-
+    delete this;
+    qDebug() << "Statements delete constructor activated";
 }
-*/
+
 
 
 /*
 *   MYSQL DELETE STATEMENT
-*
-
-bool statements::deleteStatement(QList<QString> data, int lineCounter, int wordCounter, QFile &file){
-
-
-}
+*   drop rows based on the first column of data
 */
+bool Statements::deleteStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file){
+
+    QTextStream stream(&file);
+
+    _where = "WHERE {column_name} IN (";
+
+    stream << _delete;
+    stream << _where;
+    for(int i = 0; i < lineCounter; i++)
+    {
+
+       (i != lineCounter-1) ? (stream << validateTextString(data[i][0]) << ", ") : (stream << validateTextString(data[i][0]) << ")");
+
+    }
+    stream << "\n";
+    file.close();
+
+    return true;
+}
+
 
 
 /*
 *   MYSQL INSERT STATEMENT
 *   output data into a complete insert statement format
 */
-bool statements::insertStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file){
+bool Statements::insertStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file){
 
     QTextStream stream(&file);
 
@@ -66,7 +76,7 @@ bool statements::insertStatement(QVector<QList<QString>> data, int lineCounter, 
 *   MYSQL UPDATE STATEMENT
 *   compile a list of data to update
 */
-bool statements::updateStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file){
+bool Statements::updateStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file){
 
     QTextStream stream(&file);
 
@@ -95,7 +105,7 @@ bool statements::updateStatement(QVector<QList<QString>> data, int lineCounter, 
 
 
 /*
-*   SET WHERE CLAUSE
+*   SET WHERE CLAUSE ** currently not used **
 *   set a where clause to return
 */
 QString setWhere(QString s){
@@ -111,7 +121,7 @@ QString setWhere(QString s){
 *   VALIDATE TYPE
 *   if string wrap in double quotes
 */
-QString statements::validateTextString(QString w){
+QString Statements::validateTextString(QString w){
 
       if(!w.toInt()) {
 

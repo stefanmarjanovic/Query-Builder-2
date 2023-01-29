@@ -1,25 +1,32 @@
 #include "data.h"
-#include "statements.h"
 
-Data::Data()
+
+Data::Data(MainWindow &u)
 {
+    ui = &u;
     wordCounter = 0;
     lineCounter = 0;
-    querySelector = -1;
+    querySelector = -1;             // -1 = no current selection
 }
+
+
+Data::~Data(){
+
+    qDebug() << "Data delete constructor activated";
+}
+
 
 
 /*
 *   READ FILE
 *   read the uploaded text file
 */
-
 bool Data::readFile(){
 
-    QFile dataFile(interface.getPath());
+    QFile dataFile(ui->getInputPath());
 
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "File found successfully./nReading file in progress/n";
+        qDebug() << "File found successfully.\nReading file in progress\n";
 
         // split by line
         while(!dataFile.atEnd()){
@@ -50,48 +57,40 @@ bool Data::readFile(){
 *   WRITE FILE
 *   write to the uploaded text file
 */
+bool Data::writeToFile(QVector<QList<QString>> data){
 
-bool Data::writeToFile(QVector<QList<QString>> data)
-{
+    QFile file(ui->getOutputPath());
 
-    statements s;
-
-    QFile file(interface.getOutputPath());
-
+    qDebug() << "Selection query selection: " << ui->getSelection();
 
     if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append)){
 
-        switch(querySelector){
+        switch(ui->getSelection()){
             case 1:
 
-                qDebug() << "Alter Statement";
+                s.updateStatement(data, lineCounter,wordCounter, file);
+                qDebug() << "Update Statement";
                 break;
 
             case 2:
-
-                qDebug() << "Delete Statement";
-                break;
-
-            case 3:
 
                 s.insertStatement(data, lineCounter,wordCounter, file);
                 qDebug() << "Insert Statement";
                 break;
 
-            case 4:
+            case 3:
 
-                s.updateStatement(data, lineCounter,wordCounter, file);
-                qDebug() << "Update Statement";
+                s.deleteStatement(data, lineCounter,wordCounter, file);
+                qDebug() << "Delete Statement";
                 break;
         }
-
         //  - /Users/Personal/Git/query-builder-2/suspects.txt
-        interface.setAlert("File exported successfully.");
+        ui->setAlert("File exported successfully.");
     }
     else {
 
         qCritical() << "Output path not set.";
-        interface.setAlert("Output path not set. Please enter a valid folder path and filename");
+        ui->setAlert("Output path not set. Please enter a valid folder path and filename");
 
         return false;
     }
@@ -111,6 +110,7 @@ QString Data::trim(QString s){
 }
 
 
+
 /*
 *   SPLIT LINE
 *   Split line into words separated by comma
@@ -118,13 +118,12 @@ QString Data::trim(QString s){
 void Data::splitLine(QByteArray line){
 
     QString w;
-     QList<QString> row;
+    QList<QString> row;
 
     for(int i = 0; i < line.size(); i++)
     {
 
         QChar c = line[i];
-
 
         //add word to arrayList
         if(c == ','|| i == line.size()-1) {
@@ -146,6 +145,7 @@ void Data::splitLine(QByteArray line){
 }
 
 
+
 /*
 *   DEBUG 2D ARRAY
 *   print the matrix rows and columns to the console logging
@@ -155,11 +155,11 @@ void  Data::debugMatrix(QVector<QList<QString>> matrix){
     qDebug() << "Matrix size: " << matrix.size();
     for(int i = 0; i < matrix.size(); i++)
      {
-         qDebug() << "Row " << i+1 << ": " << matrix[i];
+         qDebug() << "Row " << i + 1 << ": " << matrix[i];
 
          for(int o = 0; o < matrix[i].size(); o++){
 
-            qDebug() << "Column " << o+1 << ": " << matrix[i][o];
+            qDebug() << "Column " << o + 1 << ": " << matrix[i][o];
          }
      }
 }

@@ -1,17 +1,19 @@
 #ifndef STATEMENTS_H
 #define STATEMENTS_H
 
+#include "mainwindow.h"
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
+#include <QObject>
 
-class statements
+class Statements : public QObject
 {
 public:
 
-    statements();
-    bool alterStatement(QList<QString> data, int lineCounter, int wordCounter, QFile &file);
-    bool deleteStatement(QList<QString> data, int lineCounter, int wordCounter, QFile &file);
+    Statements();
+    ~Statements();
+    bool deleteStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
     bool insertStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
     bool updateStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
     QString setWhere(QString s);
@@ -19,11 +21,13 @@ public:
 
 private:
 
-    QString _alter;
+    QString _delete;
     QString _insert;
     QString _update;
     QString _value;
     QString _where;
+
+
 };
 
 #endif // STATEMENTS_H

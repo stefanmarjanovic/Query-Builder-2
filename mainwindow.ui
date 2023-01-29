@@ -79,7 +79,7 @@
       <x>100</x>
       <y>110</y>
       <width>371</width>
-      <height>61</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="title">
@@ -89,13 +89,13 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>25</y>
+       <y>30</y>
        <width>311</width>
-       <height>31</height>
+       <height>32</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="6">
+      <item row="1" column="4">
        <widget class="QPushButton" name="updateBtn">
         <property name="accessibleName">
          <string/>
@@ -111,7 +111,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="5">
+      <item row="1" column="5">
        <widget class="QPushButton" name="insertBtn">
         <property name="text">
          <string>Insert</string>
@@ -121,20 +121,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="4">
+      <item row="1" column="6">
        <widget class="QPushButton" name="deleteBtn">
         <property name="text">
          <string>Delete</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="alterBtn">
-        <property name="text">
-         <string>Alter</string>
         </property>
         <property name="checkable">
          <bool>true</bool>

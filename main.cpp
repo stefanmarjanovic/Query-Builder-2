@@ -4,6 +4,7 @@
 * Copyright https://www.stefanmarjanovic.com
 */
 
+
 #include "mainwindow.h"
 #include <QApplication>
 
