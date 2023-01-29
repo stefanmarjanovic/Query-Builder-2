@@ -1,5 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
+
 #include "statements.h"
 #include "mainwindow.h"
 #include <QTextStream>

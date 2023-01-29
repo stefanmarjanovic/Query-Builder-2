@@ -81,8 +81,8 @@ bool Statements::updateStatement(QVector<QList<QString>> data, int lineCounter, 
 
     QTextStream stream(&file);
 
-    _where = "WHERE {column_name} IN (1,2)";
-    whereActive = 0;
+  // _where = "WHERE {column_name} IN (1,2)";
+  //  whereActive = 0;
 
     for(int i = 0; i < lineCounter; i++)
     {

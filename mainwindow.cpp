@@ -1,12 +1,15 @@
 #include "mainwindow.h"
-#include "data.h"
 #include "ui_mainwindow.h"
+#include "data.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    wui = new QDialog();
+    wd.setupUi(wui);
     querySelector = -1;
 }
 
@@ -107,31 +110,31 @@ void MainWindow::setButtonChecked(int querySelection){
     }
 }
 
-//Signals
-
 // Slots
-
-void MainWindow::on_submitBtn_clicked()
-{
-        Data *d = new Data(*this);
-        d->readFile();
+void MainWindow::on_submitBtn_clicked(){            //generate output
+    Data *d = new Data(*this);
+    d->readFile();
 }
 
-void MainWindow::on_updateBtn_clicked()
-{
+void MainWindow::on_addWhereBtn_clicked(){          //open popup to add where clause
+
+    wui->show();
+}
+
+void MainWindow::on_updateBtn_clicked(){
+
     querySelector = 1;
     setButtonChecked(querySelector);
 }
 
-void MainWindow::on_insertBtn_clicked()
-{
+void MainWindow::on_insertBtn_clicked(){
+
     querySelector = 2;
     setButtonChecked(querySelector);
 }
 
+void MainWindow::on_deleteBtn_clicked(){
 
-void MainWindow::on_deleteBtn_clicked()
-{
     querySelector = 3;
     setButtonChecked(querySelector);
 }
