@@ -26,6 +26,7 @@ private:
     QString _update;
     QString _value;
     QString _where;
+    int whereActive;
 
 
 };

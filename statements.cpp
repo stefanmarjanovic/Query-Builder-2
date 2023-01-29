@@ -6,6 +6,7 @@ Statements::Statements()
     _insert = "INSERT INTO  {table_name}()\n";
     _update = "UPDATE {table_name}\n";
     _value  = "VALUES ";
+    whereActive = 0;
 }
 
 Statements::~Statements(){
@@ -31,7 +32,7 @@ bool Statements::deleteStatement(QVector<QList<QString>> data, int lineCounter, 
     for(int i = 0; i < lineCounter; i++)
     {
 
-       (i != lineCounter-1) ? (stream << validateTextString(data[i][0]) << ", ") : (stream << validateTextString(data[i][0]) << ")");
+       (i != lineCounter-1) ? (stream << validateTextString(data[i][0]) << ", ") : (stream << validateTextString(data[i][0]) << ");");
 
     }
     stream << "\n";
@@ -80,22 +81,39 @@ bool Statements::updateStatement(QVector<QList<QString>> data, int lineCounter, 
 
     QTextStream stream(&file);
 
+    _where = "WHERE {column_name} IN (1,2)";
+    whereActive = 0;
+
     for(int i = 0; i < lineCounter; i++)
     {
         stream << _update;
 
-        for(int o = 0; o < wordCounter; o++){
+        switch(whereActive){
 
-            (o == 0) ? (stream << "SET {column_name} = " << validateTextString(data[i][o]) << ", ") : (stream << " {column_name} = " << validateTextString(data[i][o]) << ",");
+        case 1:
+            for(int o = 0; o < wordCounter; o++){ // row data
 
+                //IF First line                                                                            //ELSE if not last word of row                                                                   // if last word of row
+                (o == 0) ? (stream << "SET {column_name} = " << validateTextString(data[i][o]) << ", ") : (o != wordCounter-1) ? (stream << " {column_name} = " << validateTextString(data[i][o]) << ",") : (stream << " {column_name} = " << validateTextString(data[i][o]) << "\n");
+
+            }
+
+            stream << _where << ";\n\n";
+            break;
+
+        default:
+
+            for(int o = 0; o < wordCounter; o++){ // row data
+
+                //IF First line                                                                            //ELSE if not last word of row                                                                   // if last word of row
+                (o == 0) ? (stream << "SET {column_name} = " << validateTextString(data[i][o]) << ", ") : (o != wordCounter-1) ? (stream << " {column_name} = " << validateTextString(data[i][o]) << ",") : (stream << " {column_name} = " << validateTextString(data[i][o]) << ";\n");
+
+            }
+
+            stream << "\n\n";
+            break;
         }
-
-        stream << "\n"<< _where <<" \n;\n";
     }
-
-    //If where clause is instantied
-    (_where != "WHERE ") ? stream << _where : stream << "";
-
     stream << "\n";
     file.close();
 

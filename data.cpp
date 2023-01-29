@@ -41,7 +41,7 @@ bool Data::readFile(){
     else {
 
         qCritical() << "File not found";
-        //window.setAlert("File not found. Please check your file path.");
+        ui->setAlert("File not found. Please check your file path.");
 
         return false;
     }
