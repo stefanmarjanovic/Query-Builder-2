@@ -25,6 +25,7 @@ public:
     QString getOutputPath();
     QString getInputPath();
     QString trim(QString s);
+    QString setWhereClause();
     int getSelection();
     void setButtonChecked(int querySelection);
     void setAlert(QString s);
@@ -36,6 +37,7 @@ private:
     QDialog *wui;
     QString inputFilename;
     QString outputFilename;
+    QString inputWhereClause;
     QMessageBox alert;
     int querySelector;
 
@@ -46,5 +48,6 @@ public slots:
     void on_updateBtn_clicked();
     void on_insertBtn_clicked();
     void on_deleteBtn_clicked();
+    void on_buttonBox_accepted();
 };
 #endif // QUERYBUILDER_H

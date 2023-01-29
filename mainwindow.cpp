@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "ui_wherebox.h"
 #include "data.h"
 
 
@@ -63,6 +64,21 @@ QString MainWindow::getOutputPath(){
 
 
 /*
+*   SET WHERE CLAUSE
+*   Get the user input from the where popup box and set it as a private string
+*/
+QString MainWindow::setWhereClause(){
+
+    inputWhereClause = wd.textEdit->toPlainText();
+
+    qDebug() << "Where Clause: " << inputWhereClause;
+
+    return inputWhereClause;
+}
+
+
+
+/*
 *   RETURN THE SELECTED QEURY
 *   returns the integer representation of the query selected by the user
 */
@@ -83,6 +99,12 @@ void MainWindow::setAlert(QString s){
     alert.show();
 }
 
+
+
+/*
+*   SET STATEMENT
+*   Allow only one input for the statement selector in the group box
+*/
 void MainWindow::setButtonChecked(int querySelection){
 
     switch(querySelection){
@@ -139,4 +161,8 @@ void MainWindow::on_deleteBtn_clicked(){
     setButtonChecked(querySelector);
 }
 
+void MainWindow::on_buttonBox_accepted()
+{
+    this->setWhereClause();
+}
 
