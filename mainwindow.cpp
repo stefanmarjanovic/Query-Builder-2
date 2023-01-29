@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "data.h"
-#include "ui_querybuilder.h"
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
