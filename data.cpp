@@ -68,18 +68,21 @@ bool Data::writeToFile(QVector<QList<QString>> data){
         switch(ui->getSelection()){
             case 1:
 
+                s.setWhere(ui->getWhereClause());
                 s.updateStatement(data, lineCounter,wordCounter, file);
                 qDebug() << "Update Statement";
                 break;
 
             case 2:
 
+                s.setWhere(ui->getWhereClause());
                 s.insertStatement(data, lineCounter,wordCounter, file);
                 qDebug() << "Insert Statement";
                 break;
 
             case 3:
 
+                s.setWhere(ui->getWhereClause());
                 s.deleteStatement(data, lineCounter,wordCounter, file);
                 qDebug() << "Delete Statement";
                 break;

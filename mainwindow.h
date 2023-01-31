@@ -26,8 +26,9 @@ public:
     QString getOutputPath();
     QString getInputPath();
     QString trim(QString s);
-    QString setWhereClause();
+    QString getWhereClause();
     int getSelection();
+    void setWhereClause();
     void setButtonChecked(int querySelection);
     void setAlert(QString s);
 

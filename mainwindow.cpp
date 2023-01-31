@@ -72,17 +72,14 @@ QString MainWindow::getOutputPath(){
 
 
 /*
-*   SET WHERE CLAUSE
-*   Get the user input from the where popup box and set it as a private string
+*   RETURN WHERE CLAUSE
+*   returns the integer representation of the query selected by the user
 */
-QString MainWindow::setWhereClause(){
-
-    inputWhereClause = wd.textEdit->toPlainText();
-
-    qDebug() << "Where Clause: " << inputWhereClause;
+QString MainWindow::getWhereClause(){
 
     return inputWhereClause;
 }
+
 
 
 
@@ -93,6 +90,19 @@ QString MainWindow::setWhereClause(){
 int MainWindow::getSelection(){
 
     return querySelector;
+}
+
+
+
+/*
+*   SET WHERE CLAUSE
+*   Get the user input from the where popup box and set it as a private string
+*/
+void MainWindow::setWhereClause(){
+
+    inputWhereClause = wd.textEdit->toPlainText();
+
+    qDebug() << "Where Clause: " << inputWhereClause;
 }
 
 

@@ -25,7 +25,7 @@ bool Statements::deleteStatement(QVector<QList<QString>> data, int lineCounter, 
 
     QTextStream stream(&file);
 
-    _where = "WHERE {column_name} IN (";
+    //_where = "WHERE {column_name} IN (";
 
     stream << _delete;
     stream << _where;
@@ -81,8 +81,10 @@ bool Statements::updateStatement(QVector<QList<QString>> data, int lineCounter, 
 
     QTextStream stream(&file);
 
-  // _where = "WHERE {column_name} IN (1,2)";
-  //  whereActive = 0;
+
+    //validate where clause
+    (!_where.isEmpty()) ? whereActive = 1 : whereActive;
+
 
     for(int i = 0; i < lineCounter; i++)
     {
@@ -123,15 +125,14 @@ bool Statements::updateStatement(QVector<QList<QString>> data, int lineCounter, 
 
 
 /*
-*   SET WHERE CLAUSE ** currently not used **
-*   set a where clause to return
+*   GET WHERE CLAUSE
+*   return where string
 */
-QString setWhere(QString s){
+QString Statements::getWhere(){
 
-    s = NULL;
-
-    return (!s.isEmpty()) ? s : s = ";\n";
+    return (!_where.isEmpty()) ? _where : _where = ";\n";
 }
+
 
 
 
@@ -149,4 +150,15 @@ QString Statements::validateTextString(QString w){
       }
 
       return w;
+}
+
+
+
+/*
+*   SET WHERE CLAUSE
+*   set a where clause to return
+*/
+void Statements::setWhere(QString s){
+
+    _where = s;
 }

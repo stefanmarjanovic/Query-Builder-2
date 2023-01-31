@@ -16,8 +16,9 @@ public:
     bool deleteStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
     bool insertStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
     bool updateStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
-    QString setWhere(QString s);
+    QString getWhere();
     QString validateTextString(QString w);
+    void setWhere(QString s);
 
 private:
 
