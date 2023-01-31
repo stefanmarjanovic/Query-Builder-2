@@ -12,6 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
     wui = new QDialog();
     wd.setupUi(wui);
     querySelector = -1;
+
+    //Create connections between UI, slots & functions
+    QObject::connect(ui->submitBtn, &QPushButton::clicked, this, &MainWindow::onGenerateClicked);
+    QObject::connect(ui->updateBtn, &QPushButton::clicked, this, &MainWindow::onUpdateClicked);
+    QObject::connect(ui->insertBtn, &QPushButton::clicked, this, &MainWindow::onInsertClicked);
+    QObject::connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::onDeleteClicked);
+    QObject::connect(ui->addWhereBtn, &QPushButton::clicked, this, &MainWindow::onAddWhereClicked);
+    QObject::connect(wd.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::onWhereSubmitted);
 }
 
 MainWindow::~MainWindow()
@@ -133,35 +141,35 @@ void MainWindow::setButtonChecked(int querySelection){
 }
 
 // Slots
-void MainWindow::on_submitBtn_clicked(){            //generate output
+void MainWindow::onGenerateClicked(){            //generate output
     Data *d = new Data(*this);
     d->readFile();
 }
 
-void MainWindow::on_addWhereBtn_clicked(){          //open popup to add where clause
+void MainWindow::onAddWhereClicked(){          //open popup to add where clause
 
     wui->show();
 }
 
-void MainWindow::on_updateBtn_clicked(){
+void MainWindow::onUpdateClicked(){
 
     querySelector = 1;
     setButtonChecked(querySelector);
 }
 
-void MainWindow::on_insertBtn_clicked(){
+void MainWindow::onInsertClicked(){
 
     querySelector = 2;
     setButtonChecked(querySelector);
 }
 
-void MainWindow::on_deleteBtn_clicked(){
+void MainWindow::onDeleteClicked(){
 
     querySelector = 3;
     setButtonChecked(querySelector);
 }
 
-void MainWindow::on_buttonBox_accepted()
+void MainWindow::onWhereSubmitted()
 {
     this->setWhereClause();
 }

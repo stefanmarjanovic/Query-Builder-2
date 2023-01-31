@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QWidget>
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -43,11 +44,11 @@ private:
 
 public slots:
 
-    void on_submitBtn_clicked();
-    void on_addWhereBtn_clicked();
-    void on_updateBtn_clicked();
-    void on_insertBtn_clicked();
-    void on_deleteBtn_clicked();
-    void on_buttonBox_accepted();
+    void onGenerateClicked();
+    void onAddWhereClicked();
+    void onUpdateClicked();
+    void onInsertClicked();
+    void onDeleteClicked();
+    void onWhereSubmitted();
 };
 #endif // QUERYBUILDER_H
