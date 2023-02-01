@@ -29,6 +29,7 @@ private:
     MainWindow *ui;
     Statements s;
     QVector<QList<QString>> matrix;
+    QList<QString> columns;
     int wordCounter;
     int lineCounter;
     int querySelector;

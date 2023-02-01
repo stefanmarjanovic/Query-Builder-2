@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::onDeleteClicked);
     QObject::connect(ui->addWhereBtn, &QPushButton::clicked, this, &MainWindow::onAddWhereClicked);
     QObject::connect(wd.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::onWhereSubmitted);
-    QObject::connect(ui->addColBtn, &QPushButton::clicked, this, &MainWindow::onAddColumnClick);
+    QObject::connect(ui->viewColBtn, &QPushButton::clicked, this, &MainWindow::onAddColumnClick);
 }
 
 MainWindow::~MainWindow()

@@ -134,7 +134,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QPushButton" name="addColBtn">
+   <widget class="QPushButton" name="viewColBtn">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -144,7 +144,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Add Columns</string>
+     <string>Columns</string>
     </property>
    </widget>
    <widget class="QPushButton" name="addWhereBtn">
@@ -157,7 +157,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Where Clause</string>
+     <string>Where</string>
     </property>
    </widget>
   </widget>
