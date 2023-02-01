@@ -1,5 +1,5 @@
 #include "data.h"
-
+#include <QRegularExpression>
 
 Data::Data(MainWindow &u)
 {
@@ -32,6 +32,7 @@ bool Data::readFile(){
         while(!dataFile.atEnd()){
 
             QByteArray line = dataFile.readLine();
+            qDebug() << "line: " << line;
             splitLine(line);
 
             lineCounter++;
@@ -102,6 +103,19 @@ bool Data::writeToFile(QVector<QList<QString>> data){
 }
 
 
+/*
+ *  TRIME SPECIAL CHARACTERS
+ *  remove trailing characters from each word
+ */
+QString Data::trimRegex(QString s){
+
+   QString rm = "[\'\"]*";
+    //s = s.remove(QRegularExpression(rm));
+
+    return (s.contains(QRegularExpression(rm))) ? s.remove(QRegularExpression(rm)): s;
+}
+
+
 
 /*
 *   TRIM STRING
@@ -131,12 +145,16 @@ void Data::splitLine(QByteArray line){
         //add word to arrayList
         if(c == ','|| i == line.size()-1) {
 
-            trim(w);                                // trim any white spaces
-            row.append(w);
+            //trim(w);        // trim any white spaces
+            //trimRegex(w);   // trim special characters
+            //qDebug() << trimRegex(trim(w));
+            row.append(trimRegex(trim(w)));
+
+            //qDebug() << w << "\n";
 
             w.clear();                              // reset string for further usage
 
-            if(lineCounter == 0) wordCounter++;     // counter for words per line
+            if(lineCounter == 0) wordCounter++;     // increment counter for words per line
             continue;
         }
 
@@ -144,7 +162,7 @@ void Data::splitLine(QByteArray line){
     }
 
     matrix.append(row);
-    //debugMatrix(matrix);
+    debugMatrix(matrix);
 }
 
 

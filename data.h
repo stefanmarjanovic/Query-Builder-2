@@ -20,6 +20,7 @@ public:
     ~Data();
     bool readFile();
     bool writeToFile(QVector<QList<QString>> data);
+    QString trimRegex(QString s);
     QString trim(QString s);
     void splitLine(QByteArray line);
     void debugMatrix(QVector<QList<QString>> data);

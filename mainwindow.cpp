@@ -165,18 +165,21 @@ void MainWindow::onUpdateClicked(){
 
     querySelector = 1;
     setButtonChecked(querySelector);
+    ui->addWhereBtn->setEnabled(true);
 }
 
 void MainWindow::onInsertClicked(){
 
     querySelector = 2;
     setButtonChecked(querySelector);
+    ui->addWhereBtn->setEnabled(false);
 }
 
 void MainWindow::onDeleteClicked(){
 
     querySelector = 3;
     setButtonChecked(querySelector);
+    ui->addWhereBtn->setEnabled(true);
 }
 
 void MainWindow::onWhereSubmitted()

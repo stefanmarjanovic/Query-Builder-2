@@ -25,15 +25,11 @@ bool Statements::deleteStatement(QVector<QList<QString>> data, int lineCounter, 
 
     QTextStream stream(&file);
 
-    //_where = "WHERE {column_name} IN (";
-
-    stream << _delete;
-    stream << _where;
     for(int i = 0; i < lineCounter; i++)
     {
-
-       (i != lineCounter-1) ? (stream << validateTextString(data[i][0]) << ", ") : (stream << validateTextString(data[i][0]) << ");");
-
+       stream << _delete;
+       stream << _where;
+       stream << validateTextString(data[i][0]) << ";\n\n";
     }
     stream << "\n";
     file.close();
@@ -65,7 +61,7 @@ bool Statements::insertStatement(QVector<QList<QString>> data, int lineCounter, 
         (i == lineCounter-1) ? (stream << ")") : (stream << "),\n");
     }
 
-    stream << ";";
+    stream << ";\n";
     file.close();
 
     return true;
@@ -80,7 +76,6 @@ bool Statements::insertStatement(QVector<QList<QString>> data, int lineCounter, 
 bool Statements::updateStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file){
 
     QTextStream stream(&file);
-
 
     //validate where clause
     (!_where.isEmpty()) ? whereActive = 1 : whereActive;
