@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "ui_wherebox.h"
+#include "ui_columnsdiag.h"
 #include <QMainWindow>
 #include <QTextStream>
 #include <QFile>
@@ -35,8 +36,10 @@ public:
 private:
 
     Ui::MainWindow *ui;
-    Ui::whereDialog wd;
+    Ui::WhereDialog wd;
+    Ui::ColumnsDiag cd;
     QDialog *wui;
+    QDialog *cdui;
     QString inputFilename;
     QString outputFilename;
     QString inputWhereClause;
@@ -51,5 +54,6 @@ public slots:
     void onInsertClicked();
     void onDeleteClicked();
     void onWhereSubmitted();
+    void onAddColumnClick();
 };
 #endif // QUERYBUILDER_H

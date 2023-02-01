@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     wui = new QDialog();
+    cdui = new QDialog();
+    cd.setupUi(cdui);
     wd.setupUi(wui);
     querySelector = -1;
 
@@ -20,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::onDeleteClicked);
     QObject::connect(ui->addWhereBtn, &QPushButton::clicked, this, &MainWindow::onAddWhereClicked);
     QObject::connect(wd.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::onWhereSubmitted);
+    QObject::connect(ui->addColBtn, &QPushButton::clicked, this, &MainWindow::onAddColumnClick);
 }
 
 MainWindow::~MainWindow()
@@ -182,8 +185,12 @@ void MainWindow::onDeleteClicked(){
     ui->addWhereBtn->setEnabled(true);
 }
 
-void MainWindow::onWhereSubmitted()
-{
+void MainWindow::onWhereSubmitted(){
+
     this->setWhereClause();
 }
 
+void MainWindow::onAddColumnClick(){
+
+    cdui->show();
+}

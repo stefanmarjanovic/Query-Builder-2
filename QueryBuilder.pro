@@ -21,6 +21,7 @@ HEADERS += \
     statements.h
 
 FORMS += \
+    columnsdiag.ui \
     mainwindow.ui \
     wherebox.ui
 
