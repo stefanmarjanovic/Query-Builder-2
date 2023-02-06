@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+
 #include "ui_wherebox.h"
 #include "ui_columnsdiag.h"
 #include <QMainWindow>
@@ -10,7 +11,7 @@
 #include <QList>
 #include <QMessageBox>
 #include <QWidget>
-
+#include "data.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,7 +23,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr, Data *d = nullptr);
     ~MainWindow();
     QString getOutputPath();
     QString getInputPath();
@@ -38,6 +39,7 @@ private:
     Ui::MainWindow *ui;
     Ui::WhereDialog wd;
     Ui::ColumnsDiag cd;
+    Data *dt;
     QDialog *wui;
     QDialog *cdui;
     QString inputFilename;
@@ -54,6 +56,9 @@ public slots:
     void onInsertClicked();
     void onDeleteClicked();
     void onWhereSubmitted();
-    void onAddColumnClick();
+    void onViewColumnClick();
+    void addColumnToList();
+    void clearColumnToList();
+    void onBackColumnList();
 };
 #endif // QUERYBUILDER_H

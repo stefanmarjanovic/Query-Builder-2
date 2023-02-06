@@ -1,7 +1,7 @@
 #ifndef STATEMENTS_H
 #define STATEMENTS_H
 
-#include "mainwindow.h"
+//#include "mainwindow.h"
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
@@ -13,9 +13,9 @@ public:
 
     Statements();
     ~Statements();
-    bool deleteStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
-    bool insertStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
-    bool updateStatement(QVector<QList<QString>> data, int lineCounter, int wordCounter, QFile &file);
+    bool deleteStatement(QVector<QList<QString>> &data, int lineNumber, int wordCounter, QFile &file);
+    bool insertStatement(QVector<QList<QString>> &data, int lineNumber, int wordCounter, QFile &file);
+    bool updateStatement(QVector<QList<QString>> &data, int lineNumber, int wordCounter, QFile &file);
     QString getWhere();
     QString validateTextString(QString w);
     void setWhere(QString s);

@@ -1,19 +1,23 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_wherebox.h"
-#include "data.h"
 
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent, Data *d)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    //UI instantiation
     ui->setupUi(this);
     wui = new QDialog();
     cdui = new QDialog();
     cd.setupUi(cdui);
     wd.setupUi(wui);
     querySelector = -1;
+
+    //User-defined Class
+    d = new Data();
+    dt = d; //Data
 
     //Create connections between UI, slots & functions
     QObject::connect(ui->submitBtn, &QPushButton::clicked, this, &MainWindow::onGenerateClicked);
@@ -22,7 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::onDeleteClicked);
     QObject::connect(ui->addWhereBtn, &QPushButton::clicked, this, &MainWindow::onAddWhereClicked);
     QObject::connect(wd.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::onWhereSubmitted);
-    QObject::connect(ui->viewColBtn, &QPushButton::clicked, this, &MainWindow::onAddColumnClick);
+    QObject::connect(ui->viewColBtn, &QPushButton::clicked, this, &MainWindow::onViewColumnClick);
+    QObject::connect(cd.addBtn, &QPushButton::clicked, this, &MainWindow::addColumnToList);
+    QObject::connect(cd.clearBtn, &QPushButton::clicked, this, &MainWindow::clearColumnToList);
+    //QObject::connect(cd.backBtn, &QPushButton::clicked, d, &Data::addColumnToList);
+
 }
 
 MainWindow::~MainWindow()
@@ -154,9 +162,9 @@ void MainWindow::setButtonChecked(int querySelection){
 }
 
 // Slots
-void MainWindow::onGenerateClicked(){            //generate output
-    Data *d = new Data(*this);
-    d->readFile();
+void MainWindow::onGenerateClicked(){
+
+    dt->readFile(this->getInputPath(), this->getOutputPath(), this->querySelector);
 }
 
 void MainWindow::onAddWhereClicked(){          //open popup to add where clause
@@ -190,7 +198,25 @@ void MainWindow::onWhereSubmitted(){
     this->setWhereClause();
 }
 
-void MainWindow::onAddColumnClick(){
+void MainWindow::onViewColumnClick(){
 
     cdui->show();
+}
+
+void MainWindow::addColumnToList(){
+
+    //QString col = data::getColumnList();
+    cd.listWidget->addItem("Column");
+}
+
+void MainWindow::clearColumnToList(){
+
+    //data::clearColumnsList();
+
+    cd.listWidget->clear();
+}
+
+void MainWindow::onBackColumnList(){
+
+    cdui->hide();
 }

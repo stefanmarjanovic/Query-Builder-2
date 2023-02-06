@@ -1,12 +1,17 @@
 #include "data.h"
+#include "QtCore/qforeach.h"
 #include <QRegularExpression>
 
-Data::Data(MainWindow &u)
+Data::Data()
 {
-    ui = &u;
+
+    s = new Statements();
     wordCounter = 0;
-    lineCounter = 0;
+    lineNumber = 0;
     querySelector = -1;             // -1 = no current selection
+    qDebug() << "Constructor wordCounter: " << wordCounter;
+    qDebug() << "Constructor lineNumber: " << lineNumber;
+    qDebug() << "Constructor querySelector: " << querySelector;
 }
 
 
@@ -21,33 +26,38 @@ Data::~Data(){
 *   READ FILE
 *   read the uploaded text file
 */
-bool Data::readFile(){
+bool Data::readFile(QString inputPath, QString outputPath, int queryOption){
 
-    QFile dataFile(ui->getInputPath());
+    QFile dataFile(inputPath);
+    QTextStream read(&dataFile);
 
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "File found successfully.\nReading file in progress\n";
+        qDebug() << "Read Function Line number: " << lineNumber;
 
-        // split by line
-        while(!dataFile.atEnd()){
+        //count lines
+        countLines(&read);
+        dataFile.reset();
 
+        //read line into Class
+        for(int i = 0; i < (lineNumber-1); i++)
+        {
             QByteArray line = dataFile.readLine();
-            qDebug() << "line: " << line;
             splitLine(line);
-
-            lineCounter++;
         }
-
     }
     else {
 
         qCritical() << "File not found";
-        ui->setAlert("File not found. Please check your file path.");
+        //ui->setAlert("File not found. Please check your file path.");
 
         return false;
     }
 
-    writeToFile(matrix);
+    dataFile.flush();
+    dataFile.close();
+    writeToFile(matrix,outputPath,queryOption);
+    debugMatrix(matrix);
 
     return true;
 }
@@ -58,43 +68,45 @@ bool Data::readFile(){
 *   WRITE FILE
 *   write to the uploaded text file
 */
-bool Data::writeToFile(QVector<QList<QString>> data){
+bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int queryOption){
 
-    QFile file(ui->getOutputPath());
+    QFile file(outputPath);
+    querySelector = queryOption;
 
-    qDebug() << "Selection query selection: " << ui->getSelection();
+    qDebug() << "Query Selector: " << querySelector;
 
     if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append)){
 
-        switch(ui->getSelection()){
+        switch(querySelector){
             case 1:
 
-                s.setWhere(ui->getWhereClause());
-                s.updateStatement(data, lineCounter,wordCounter, file);
+                //s.setWhere(ui->getWhereClause());
+                s->updateStatement(data, lineNumber,wordCounter, file);
                 qDebug() << "Update Statement";
                 break;
 
             case 2:
 
-                s.setWhere(ui->getWhereClause());
-                s.insertStatement(data, lineCounter,wordCounter, file);
+               // s.setWhere(ui->getWhereClause());
+                s->insertStatement(data, lineNumber,wordCounter, file);
                 qDebug() << "Insert Statement";
                 break;
 
             case 3:
 
-                s.setWhere(ui->getWhereClause());
-                s.deleteStatement(data, lineCounter,wordCounter, file);
+                //s.setWhere(ui->getWhereClause());
+                s->deleteStatement(data, lineNumber,wordCounter, file);
                 qDebug() << "Delete Statement";
                 break;
         }
         //  - /Users/Personal/Git/query-builder-2/suspects.txt
-        ui->setAlert("File exported successfully.");
+        //ui->setAlert("File exported successfully.");
+        qDebug() << "File exported successfully";
     }
     else {
 
         qCritical() << "Output path not set.";
-        ui->setAlert("Output path not set. Please enter a valid folder path and filename");
+       // ui->setAlert("Output path not set. Please enter a valid folder path and filename");
 
         return false;
     }
@@ -103,14 +115,14 @@ bool Data::writeToFile(QVector<QList<QString>> data){
 }
 
 
+
 /*
  *  TRIME SPECIAL CHARACTERS
- *  remove trailing characters from each word
+ *  remove trailing characters from each word and strip new line \n \r
  */
 QString Data::trimRegex(QString s){
 
-   QString rm = "[\'\"]*";
-    //s = s.remove(QRegularExpression(rm));
+   QString rm = "[\'\"]*[\n\r]*";
 
     return (s.contains(QRegularExpression(rm))) ? s.remove(QRegularExpression(rm)): s;
 }
@@ -129,40 +141,64 @@ QString Data::trim(QString s){
 
 
 /*
+ *  LINE COUNTER
+ *  counts the number of lines in a file.
+ */
+void Data::countLines(QTextStream *in){
+    QString line;
+
+    do
+    {
+        line = in->readLine();
+        lineNumber++;
+    }
+    while(!line.isNull());
+}
+
+
+
+/*
 *   SPLIT LINE
 *   Split line into words separated by comma
 */
 void Data::splitLine(QByteArray line){
 
-    QString w;
     QList<QString> row;
+    QString w;
 
-    for(int i = 0; i < line.size(); i++)
-    {
+    foreach(QByteArray word, line.split(',')){
 
-        QChar c = line[i];
-
-        //add word to arrayList
-        if(c == ','|| i == line.size()-1) {
-
-            //trim(w);        // trim any white spaces
-            //trimRegex(w);   // trim special characters
-            //qDebug() << trimRegex(trim(w));
-            row.append(trimRegex(trim(w)));
-
-            //qDebug() << w << "\n";
-
-            w.clear();                              // reset string for further usage
-
-            if(lineCounter == 0) wordCounter++;     // increment counter for words per line
-            continue;
-        }
-
-        w.append(c);                                // add letter to form a word
+        w = word;
+        row.append(trimRegex(trim(w)));
+        wordCounter++;
     }
 
+
     matrix.append(row);
-    debugMatrix(matrix);
+}
+
+
+/*
+ *  RETURN COLUMN INDEX
+ *  retrieve a value at the index of the column list
+ */
+QString Data::getColumnList(int position){
+
+    return columns[position];
+}
+
+
+
+
+/*
+ *  ADD COLUMN
+ *  add string from UI to column list
+ */
+void Data::addColumnToList(QString c){
+
+       columns.append(c);
+
+       qDebug() << c << " added to columns list";
 }
 
 
