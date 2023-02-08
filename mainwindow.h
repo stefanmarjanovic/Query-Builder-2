@@ -4,14 +4,14 @@
 
 #include "ui_wherebox.h"
 #include "ui_columnsdiag.h"
+#include "data.h"
 #include <QMainWindow>
 #include <QTextStream>
 #include <QFile>
 #include <QDebug>
 #include <QList>
-#include <QMessageBox>
 #include <QWidget>
-#include "data.h"
+#include <QInputDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,7 +28,7 @@ public:
     QString getOutputPath();
     QString getInputPath();
     QString trim(QString s);
-    QString getWhereClause();
+
     int getSelection();
     void setWhereClause();
     void setButtonChecked(int querySelection);
@@ -42,10 +42,9 @@ private:
     Data *dt;
     QDialog *wui;
     QDialog *cdui;
+    QInputDialog columnInput;
     QString inputFilename;
     QString outputFilename;
-    QString inputWhereClause;
-    QMessageBox alert;
     int querySelector;
 
 public slots:
@@ -60,5 +59,9 @@ public slots:
     void addColumnToList();
     void clearColumnToList();
     void onBackColumnList();
+    void inputTextadded();
+
+signals:
+
 };
 #endif // QUERYBUILDER_H

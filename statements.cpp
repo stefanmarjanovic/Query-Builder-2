@@ -7,6 +7,7 @@ Statements::Statements()
     _update = "UPDATE {table_name}\n";
     _value  = "VALUES ";
     whereActive = 0;
+    qDebug() << "Statement Constructor called";
 }
 
 Statements::~Statements(){
@@ -21,7 +22,7 @@ Statements::~Statements(){
 *   MYSQL DELETE STATEMENT
 *   drop rows based on the first column of data
 */
-bool Statements::deleteStatement(QVector<QList<QString>> &data, int lineNumber, int wordCounter, QFile &file){
+bool Statements::deleteStatement(QVector<QList<QString>> &data, int lineNumber, /*int wordCounter,*/ QFile &file){
 
     QTextStream stream(&file);
 

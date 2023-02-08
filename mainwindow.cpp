@@ -25,11 +25,12 @@ MainWindow::MainWindow(QWidget *parent, Data *d)
     QObject::connect(ui->insertBtn, &QPushButton::clicked, this, &MainWindow::onInsertClicked);
     QObject::connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::onDeleteClicked);
     QObject::connect(ui->addWhereBtn, &QPushButton::clicked, this, &MainWindow::onAddWhereClicked);
-    QObject::connect(wd.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::onWhereSubmitted);
     QObject::connect(ui->viewColBtn, &QPushButton::clicked, this, &MainWindow::onViewColumnClick);
+    QObject::connect(wd.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::onWhereSubmitted);
     QObject::connect(cd.addBtn, &QPushButton::clicked, this, &MainWindow::addColumnToList);
     QObject::connect(cd.clearBtn, &QPushButton::clicked, this, &MainWindow::clearColumnToList);
-    //QObject::connect(cd.backBtn, &QPushButton::clicked, d, &Data::addColumnToList);
+    QObject::connect(cd.backBtn, &QPushButton::clicked, this, &MainWindow::onBackColumnList);
+    QObject::connect(ui->inputPath, &QLineEdit::editingFinished, this, &MainWindow::inputTextadded);
 
 }
 
@@ -82,17 +83,6 @@ QString MainWindow::getOutputPath(){
 
 
 
-/*
-*   RETURN WHERE CLAUSE
-*   returns the integer representation of the query selected by the user
-*/
-QString MainWindow::getWhereClause(){
-
-    return inputWhereClause;
-}
-
-
-
 
 /*
 *   RETURN THE SELECTED QEURY
@@ -111,21 +101,8 @@ int MainWindow::getSelection(){
 */
 void MainWindow::setWhereClause(){
 
-    inputWhereClause = wd.textEdit->toPlainText();
-
-    qDebug() << "Where Clause: " << inputWhereClause;
-}
-
-
-
-/*
-*   ALERT MESSAGE BOX
-*   call this function to alert the user of any issues
-*/
-void MainWindow::setAlert(QString s){
-
-    alert.setText(s);
-    alert.show();
+    QString inputWhereClause = wd.textEdit->toPlainText();
+    dt->setWhere(inputWhereClause);
 }
 
 
@@ -164,7 +141,7 @@ void MainWindow::setButtonChecked(int querySelection){
 // Slots
 void MainWindow::onGenerateClicked(){
 
-    dt->readFile(this->getInputPath(), this->getOutputPath(), this->querySelector);
+    dt->generate(this->getInputPath(), this->getOutputPath(), this->querySelector);
 }
 
 void MainWindow::onAddWhereClicked(){          //open popup to add where clause
@@ -205,18 +182,30 @@ void MainWindow::onViewColumnClick(){
 
 void MainWindow::addColumnToList(){
 
-    //QString col = data::getColumnList();
-    cd.listWidget->addItem("Column");
+    QString c = columnInput.getText(0,"Add Column","Enter column name:");
+
+    dt->addColumnToList(c);
+    cd.listWidget->addItem(c);
 }
 
 void MainWindow::clearColumnToList(){
 
-    //data::clearColumnsList();
-
+    dt->clearList();
     cd.listWidget->clear();
 }
 
 void MainWindow::onBackColumnList(){
 
     cdui->hide();
+}
+
+void MainWindow::inputTextadded(){
+
+    (dt->parseText(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
+
+    if(dt->parseText(this->getInputPath()) != false) {
+
+        inputFilename = ui->inputPath->text();
+        qDebug() << "Slot set filepath: " << inputFilename;
+    }
 }
