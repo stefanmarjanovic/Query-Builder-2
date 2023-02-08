@@ -149,10 +149,18 @@ bool Data::validateColumns(){
 }
 
 
+/*
+ *  VALIDATE FILE
+ *  Check if the source file exists
+ */
+bool validateFile(QString s){
 
-bool validateFile(){
+    QString inputfilepath = s;
 
+    QFile dataFile(inputfilepath);
+    if(dataFile.open(QFile::ReadOnly | QFile::Text)) return true;
 
+    return false;
 }
 
 

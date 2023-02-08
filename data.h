@@ -23,7 +23,7 @@ public:
     bool generate(QString inputPath, QString outputPath, int queryOption);
     bool writeToFile(QVector<QList<QString>> data, QString outputPath, int queryOption);
     bool validateColumns();
-    bool validateFile();
+    bool validateFile(QString s);
     QString getWhere();
     QString trimRegex(QString s);
     QString trim(QString s);

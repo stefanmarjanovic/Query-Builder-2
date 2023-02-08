@@ -13,7 +13,7 @@ public:
 
     Statements();
     ~Statements();
-    bool deleteStatement(QVector<QList<QString>> &data, int lineNumber, int wordCounter, QFile &file);
+    bool deleteStatement(QVector<QList<QString>> &data, int lineNumber, /*int wordCounter,*/ QFile &file);
     bool insertStatement(QVector<QList<QString>> &data, int lineNumber, int wordCounter, QFile &file);
     bool updateStatement(QVector<QList<QString>> &data, int lineNumber, int wordCounter, QFile &file);
     QString getWhere();

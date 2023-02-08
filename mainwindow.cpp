@@ -201,11 +201,6 @@ void MainWindow::onBackColumnList(){
 
 void MainWindow::inputTextadded(){
 
-    (dt->parseText(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
+    (dt->validateFile(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
 
-    if(dt->parseText(this->getInputPath()) != false) {
-
-        inputFilename = ui->inputPath->text();
-        qDebug() << "Slot set filepath: " << inputFilename;
-    }
 }
