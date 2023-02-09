@@ -6,8 +6,8 @@ Data::Data()
 {
 
     s = new Statements();
-    wordCounter = 0;
-    lineNumber = 0;
+    wordCounter = -1;
+    lineNumber = -1;
     querySelector = -1;             // no current selection
     qDebug() << "Data Constructor called";
 
@@ -42,7 +42,7 @@ bool Data::parseText(QString i){
         dataFile.reset();
 
         //read line into Class
-        for(int i = 0; i < (lineNumber-1); i++)
+        for(int i = 0; i < lineNumber; i++)
         {
             QByteArray line = dataFile.readLine();
             splitLine(line);
@@ -59,6 +59,8 @@ bool Data::parseText(QString i){
         return false;
     }
 
+    debugMatrix(matrix);
+
     return true;
 }
 
@@ -70,8 +72,8 @@ bool Data::parseText(QString i){
 bool Data::generate(QString inputPath, QString outputPath, int queryOption){
 
     parseText(inputPath);
+    qDebug() << "Parsing text completed";
     writeToFile(matrix,outputPath,queryOption);
-    debugMatrix(matrix);
 
     return true;
 }
@@ -153,7 +155,7 @@ bool Data::validateColumns(){
  *  VALIDATE FILE
  *  Check if the source file exists
  */
-bool validateFile(QString s){
+bool Data::validateFile(QString s){
 
     QString inputfilepath = s;
 
@@ -225,6 +227,9 @@ void Data::countLines(QTextStream *in){
     {
         line = in->readLine();
         lineNumber++;
+
+        qDebug() << "Line: " << lineNumber << " " << line;
+
     }
     while(!line.isNull());
 }
@@ -240,10 +245,21 @@ void Data::countWords(QFile *dataFile){
 
     do
     {
-        QByteArray line = dataFile->readLine();
-        splitLine(line);
+        line = dataFile->readLine();
+        // split words and count
+        QString w;
+
+        foreach(QString word, line.split(',')){
+
+            //w = word;
+            wordCounter++;
+            qDebug() << "Word " << wordCounter  << ": " << word ;
+        }
+
     }
     while(!line.isNull());
+
+    qDebug() << "Total Words: " << wordCounter;
 }
 
 
@@ -305,7 +321,6 @@ void Data::splitLine(QByteArray line){
 
         w = word;
         row.append(trimRegex(trim(w)));
-        wordCounter++;
     }
 
 

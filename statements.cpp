@@ -6,6 +6,7 @@ Statements::Statements()
     _insert = "INSERT INTO  {table_name}()\n";
     _update = "UPDATE {table_name}\n";
     _value  = "VALUES ";
+    _where  = "WHERE ";
     whereActive = 0;
     qDebug() << "Statement Constructor called";
 }
@@ -26,7 +27,7 @@ bool Statements::deleteStatement(QVector<QList<QString>> &data, int lineNumber, 
 
     QTextStream stream(&file);
 
-    for(int i = 0; i < lineNumber-1; i++)
+    for(int i = 0; i < lineNumber; i++)
     {
        stream << _delete;
        stream << _where;
@@ -34,6 +35,8 @@ bool Statements::deleteStatement(QVector<QList<QString>> &data, int lineNumber, 
        qDebug() << data[i][0] << ";\n\n";
     }
     stream << "\n";
+
+    file.flush();
     file.close();
 
     return true;
@@ -56,20 +59,22 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, int lineNumber, 
     qDebug() << "Words per row: " << wordCounter/(lineNumber-1);
 
 
-    for(int i = 0; i < lineNumber-1; i++)
+    for(int i = 0; i < lineNumber; i++)
     {
         stream << _value << " (";
-        for(int o = 0; o < (wordCounter/(lineNumber-1)); o++){
+        for(int o = 0; o < (wordCounter/lineNumber); o++){
 
             qDebug() << "Entered insert statement";
-            (o != (wordCounter/(lineNumber-1))-1) ? (stream << validateTextString(data[i][o]) << ",") : (stream << validateTextString(data[i][o]));
+            (o != (wordCounter/(lineNumber)-1)) ? (stream << validateTextString(data[i][o]) << ",") : (stream << validateTextString(data[i][o]));
         }
 
-        (i == lineNumber-2) ? (stream << ")") : (stream << "),\n");
+        (i == lineNumber-1) ? (stream << ")") : (stream << "),\n");
     }
 
     stream << ";\n";
+    file.flush();
     file.close();
+
 
     return true;
 };
@@ -85,20 +90,21 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, int lineNumber, 
     QTextStream stream(&file);
 
     //validate where clause
-    (!_where.isEmpty()) ? whereActive = 1 : whereActive;
+    (_where != "WHERE ") ? whereActive = 1 : whereActive;
+    qDebug() << "Where boolean: " << _where;
 
-
-    for(int i = 0; i < lineNumber-1; i++)
+    for(int i = 0; i < lineNumber; i++)
     {
         stream << _update;
 
         switch(whereActive){
 
         case 1:
-            for(int o = 0; o < (wordCounter/(lineNumber-1)); o++){ // row data
 
-                //IF First line                                                                            //ELSE if not last word of row                                                                   // if last word of row
-                (o == 0) ? (stream << "SET {column_name} = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber-1)-1)) ? (stream << " {column_name} = " << validateTextString(data[i][o]) << ",") : (stream << " {column_name} = " << validateTextString(data[i][o]) << "\n");
+            for(int o = 0; o < (wordCounter/lineNumber); o++){ // row data
+
+                //IF First line                                                                            //ELSE if not last word of row                                                                               // if last word of row
+                (o == 0) ? (stream << "SET {column_name} = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << " {column_name} = " << validateTextString(data[i][o]) << ",") : (stream << " {column_name} = " << validateTextString(data[i][o]) << "\n");
 
             }
 
@@ -107,10 +113,10 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, int lineNumber, 
 
         default:
 
-            for(int o = 0; o < (wordCounter/(lineNumber-1)); o++){ // row data
+            for(int o = 0; o < (wordCounter/lineNumber); o++){ // row data
 
-                //IF First line                                                                            //ELSE if not last word of row                                                                   // if last word of row
-                (o == 0) ? (stream << "SET {column_name} = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber-1)-1)) ? (stream << " {column_name} = " << validateTextString(data[i][o]) << ",") : (stream << " {column_name} = " << validateTextString(data[i][o]) << ";\n");
+                //IF First line                                                                            //ELSE if not last word of row                                                                               // if last word of row
+                (o == 0) ? (stream << "SET {column_name} = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << " {column_name} = " << validateTextString(data[i][o]) << ",") : (stream << " {column_name} = " << validateTextString(data[i][o]) << ";\n");
 
             }
 
@@ -119,6 +125,8 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, int lineNumber, 
         }
     }
     stream << "\n";
+
+    file.flush();
     file.close();
 
     return true;
@@ -158,9 +166,9 @@ QString Statements::validateTextString(QString w){
 
 /*
 *   SET WHERE CLAUSE
-*   set a where clause to return
+*   set a where clause
 */
 void Statements::setWhere(QString s){
 
-    _where = s;
+    _where += s;
 }
