@@ -182,11 +182,35 @@ void MainWindow::onViewColumnClick(){
 
 void MainWindow::addColumnToList(){
 
-    QString c = columnInput.getText(0,"Add Column","Enter column name:");
 
-    dt->addColumnToList(c);
-    cd.listWidget->addItem(c);
-}
+
+    try {
+        int totalColumns = dt->getTotalWordsPerLine();
+
+
+        if(cd.listWidget->count() < totalColumns){
+
+            QString c = columnInput.getText(0,"Add Column","Enter column name:");
+            dt->addColumnToList(c);
+            cd.listWidget->addItem(c);
+
+            qDebug() << "Current Widget Column Count: " << cd.listWidget->count();
+        }
+        else{
+
+            throw (totalColumns);
+            qDebug() << "throw exception entered";
+
+        }
+
+    } catch (int totalColumns) {
+
+        qCritical() << "Error - cannot add more columns than exists in datasource";
+        dt->setAlert(QString("Cannot add more columns than").arg(totalColumns));
+    }
+
+;}
+
 
 void MainWindow::clearColumnToList(){
 
@@ -203,4 +227,5 @@ void MainWindow::inputTextadded(){
 
     (dt->validateFile(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
 
+    if(dt->validateFile(this->getInputPath()) != false) dt->validateColumns(this->getInputPath());
 }

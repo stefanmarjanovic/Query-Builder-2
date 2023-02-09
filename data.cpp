@@ -7,7 +7,7 @@ Data::Data()
 
     s = new Statements();
     wordCounter = -1;
-    lineNumber = -1;
+    lineCounter = -1;
     querySelector = -1;             // no current selection
     qDebug() << "Data Constructor called";
 
@@ -33,16 +33,9 @@ bool Data::parseText(QString i){
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "File found successfully.\nReading file in progress\n";
 
-        //count lines
-        countLines(&read);
-        dataFile.reset();
-
-        //count words
-        countWords(&dataFile);
-        dataFile.reset();
-
         //read line into Class
-        for(int i = 0; i < lineNumber; i++)
+        qDebug() << "Line Count" << lineCounter;
+        for(int i = 0; i < lineCounter; i++)
         {
             QByteArray line = dataFile.readLine();
             splitLine(line);
@@ -59,7 +52,7 @@ bool Data::parseText(QString i){
         return false;
     }
 
-    debugMatrix(matrix);
+    //debugMatrix(matrix);
 
     return true;
 }
@@ -72,7 +65,6 @@ bool Data::parseText(QString i){
 bool Data::generate(QString inputPath, QString outputPath, int queryOption){
 
     parseText(inputPath);
-    qDebug() << "Parsing text completed";
     writeToFile(matrix,outputPath,queryOption);
 
     return true;
@@ -89,29 +81,27 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
     QFile file(outputPath);
     querySelector = queryOption;
 
-    qDebug() << "Query Selector: " << querySelector;
-
     if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append)){
 
         switch(querySelector){
             case 1:
 
                 s->setWhere(this->getWhere());
-                s->updateStatement(data, lineNumber,wordCounter, file);
+                s->updateStatement(data, lineCounter,wordCounter, file);
                 qDebug() << "Update Statement";
                 break;
 
             case 2:
 
                 s->setWhere(this->getWhere());
-                s->insertStatement(data, lineNumber,wordCounter, file);
+                s->insertStatement(data, lineCounter,wordCounter, file);
                 qDebug() << "Insert Statement";
                 break;
 
             case 3:
 
                 s->setWhere(this->getWhere());
-                s->deleteStatement(data, lineNumber,/*wordCounter,*/ file);
+                s->deleteStatement(data, lineCounter,/*wordCounter,*/ file);
                 qDebug() << "Delete Statement";
                 break;
         }
@@ -139,13 +129,37 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
  *
  *
  */
-bool Data::validateColumns(){
+bool Data::validateColumns(QString s){
 
     // read words text
     // calculate words per line
     // compare to column list
+    QFile dataFile(s);
+    QTextStream read(&dataFile);
 
+    if(dataFile.open(QFile::ReadOnly | QFile::Text)){
+        qDebug() << "Counting lines\n";
 
+        //count lines
+        countLines(&read);
+        dataFile.reset();
+
+        qDebug() << "Counting words\n";
+        //count words
+        countWords(&dataFile);
+
+        dataFile.flush();
+        dataFile.close();
+    }
+    else {
+
+        dataFile.flush();
+        dataFile.close();
+        qCritical() << "File not found";
+        return false;
+    }
+
+    qDebug() << "Words per line: " << (wordCounter / lineCounter);
 
     return true;
 }
@@ -226,9 +240,9 @@ void Data::countLines(QTextStream *in){
     do
     {
         line = in->readLine();
-        lineNumber++;
+        lineCounter++;
 
-        qDebug() << "Line: " << lineNumber << " " << line;
+        qDebug() << "Line: " << lineCounter << " " << line;
 
     }
     while(!line.isNull());
@@ -246,12 +260,10 @@ void Data::countWords(QFile *dataFile){
     do
     {
         line = dataFile->readLine();
-        // split words and count
-        QString w;
 
+        // split line into words and count words per line
         foreach(QString word, line.split(',')){
 
-            //w = word;
             wordCounter++;
             qDebug() << "Word " << wordCounter  << ": " << word ;
         }
@@ -304,8 +316,7 @@ void Data::setAlert(QString s){
 void Data::setWhere(QString s){
 
     _where = s;
-}
-
+} 
 
 
 /*
@@ -335,6 +346,19 @@ void Data::splitLine(QByteArray line){
 QString Data::getColumnList(int position){
 
     return columns[position];
+}
+
+
+
+/*
+ *  RETURN THE NUMBER OF WORDS PER LINE
+ *  returns the amount of elements a.k.a words per line use for comparison
+ */
+int Data::getTotalWordsPerLine(){
+
+    qDebug() << "Column Count in Data class: " << (wordCounter / lineCounter);
+
+    return (wordCounter / lineCounter);
 }
 
 

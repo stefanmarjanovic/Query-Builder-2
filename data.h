@@ -22,12 +22,13 @@ public:
     bool parseText(QString i);
     bool generate(QString inputPath, QString outputPath, int queryOption);
     bool writeToFile(QVector<QList<QString>> data, QString outputPath, int queryOption);
-    bool validateColumns();
+    bool validateColumns(QString s);
     bool validateFile(QString s);
     QString getWhere();
     QString trimRegex(QString s);
     QString trim(QString s);
     QString getColumnList(int position);
+    int getTotalWordsPerLine();
     void addColumnToList(QString c);
     void clearList();
     void countLines(QTextStream *in);
@@ -49,7 +50,7 @@ private:
     QMessageBox alert;
     QString _where;
     int wordCounter;
-    int lineNumber;
+    int lineCounter;
     int querySelector;
 
 
