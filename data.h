@@ -25,6 +25,7 @@ public:
     bool validateColumns(QString s);
     bool validateFile(QString s);
     QString getWhere();
+    QString getNextColumn(int i);
     QString trimRegex(QString s);
     QString trim(QString s);
     QString getColumnList(int position);

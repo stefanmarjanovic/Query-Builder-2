@@ -28,7 +28,6 @@ public:
     QString getOutputPath();
     QString getInputPath();
     QString trim(QString s);
-
     int getSelection();
     void setWhereClause();
     void setButtonChecked(int querySelection);
@@ -45,7 +44,7 @@ private:
     QInputDialog columnInput;
     QString inputFilename;
     QString outputFilename;
-    int querySelector;
+    int queryType;
 
 public slots:
 
@@ -62,6 +61,8 @@ public slots:
     void inputTextadded();
 
 signals:
+
+
 
 };
 #endif // QUERYBUILDER_H

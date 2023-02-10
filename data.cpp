@@ -34,7 +34,7 @@ bool Data::parseText(QString i){
         qDebug() << "File found successfully.\nReading file in progress\n";
 
         //read line into Class
-        qDebug() << "Line Count" << lineCounter;
+        qDebug() << "Parse Text Line Count" << lineCounter;
         for(int i = 0; i < lineCounter; i++)
         {
             QByteArray line = dataFile.readLine();
@@ -51,8 +51,6 @@ bool Data::parseText(QString i){
         qCritical() << "File not found";
         return false;
     }
-
-    //debugMatrix(matrix);
 
     return true;
 }
@@ -87,21 +85,21 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
             case 1:
 
                 s->setWhere(this->getWhere());
-                s->updateStatement(data, lineCounter,wordCounter, file);
+                s->updateStatement(data, columns, file, lineCounter, wordCounter);
                 qDebug() << "Update Statement";
                 break;
 
             case 2:
 
                 s->setWhere(this->getWhere());
-                s->insertStatement(data, lineCounter,wordCounter, file);
+                s->insertStatement(data, columns, file, lineCounter, wordCounter);
                 qDebug() << "Insert Statement";
                 break;
 
             case 3:
 
                 s->setWhere(this->getWhere());
-                s->deleteStatement(data, lineCounter,/*wordCounter,*/ file);
+                s->deleteStatement(data, columns, file, lineCounter);
                 qDebug() << "Delete Statement";
                 break;
         }
@@ -126,14 +124,11 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
 
 /*
- *
- *
+ *  VALIDATE COLUMNS
+ *  Counts the amount of columns, words, lines in the file being parsed
  */
 bool Data::validateColumns(QString s){
 
-    // read words text
-    // calculate words per line
-    // compare to column list
     QFile dataFile(s);
     QTextStream read(&dataFile);
 
@@ -159,8 +154,6 @@ bool Data::validateColumns(QString s){
         return false;
     }
 
-    qDebug() << "Words per line: " << (wordCounter / lineCounter);
-
     return true;
 }
 
@@ -177,6 +170,17 @@ bool Data::validateFile(QString s){
     if(dataFile.open(QFile::ReadOnly | QFile::Text)) return true;
 
     return false;
+}
+
+
+
+/*
+ *  RETURN THE NEXT COLUMN NAME
+ *  retrieves the column name that will be passed to the statements for printing
+ */
+QString Data::getNextColumn(int i){
+
+    return columns[i];
 }
 
 
@@ -223,9 +227,9 @@ QString Data::trim(QString s){
  */
 void Data::addColumnToList(QString c){
 
-       columns.append(c);
+        QString col = c.prepend('`').append('`');
 
-       qDebug() << c << " added to columns list";
+       columns.append(col);
 }
 
 

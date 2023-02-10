@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent, Data *d)
     cdui = new QDialog();
     cd.setupUi(cdui);
     wd.setupUi(wui);
-    querySelector = -1;
+    queryType = -1;
 
     //User-defined Class
     d = new Data();
@@ -90,7 +90,7 @@ QString MainWindow::getOutputPath(){
 */
 int MainWindow::getSelection(){
 
-    return querySelector;
+    return queryType;
 }
 
 
@@ -141,7 +141,7 @@ void MainWindow::setButtonChecked(int querySelection){
 // Slots
 void MainWindow::onGenerateClicked(){
 
-    dt->generate(this->getInputPath(), this->getOutputPath(), this->querySelector);
+    dt->generate(this->getInputPath(), this->getOutputPath(), this->queryType);
 }
 
 void MainWindow::onAddWhereClicked(){          //open popup to add where clause
@@ -151,22 +151,22 @@ void MainWindow::onAddWhereClicked(){          //open popup to add where clause
 
 void MainWindow::onUpdateClicked(){
 
-    querySelector = 1;
-    setButtonChecked(querySelector);
+    queryType = 1;
+    setButtonChecked(queryType);
     ui->addWhereBtn->setEnabled(true);
 }
 
 void MainWindow::onInsertClicked(){
 
-    querySelector = 2;
-    setButtonChecked(querySelector);
+    queryType = 2;
+    setButtonChecked(queryType);
     ui->addWhereBtn->setEnabled(false);
 }
 
 void MainWindow::onDeleteClicked(){
 
-    querySelector = 3;
-    setButtonChecked(querySelector);
+    queryType = 3;
+    setButtonChecked(queryType);
     ui->addWhereBtn->setEnabled(true);
 }
 
@@ -194,13 +194,10 @@ void MainWindow::addColumnToList(){
             dt->addColumnToList(c);
             cd.listWidget->addItem(c);
 
-            qDebug() << "Current Widget Column Count: " << cd.listWidget->count();
         }
         else{
 
             throw (totalColumns);
-            qDebug() << "throw exception entered";
-
         }
 
     } catch (int totalColumns) {
