@@ -42,7 +42,6 @@ bool Data::parseText(QString i){
     QTextStream read(&dataFile);
 
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "File found successfully.\nReading file in progress\n";
 
         //read line into Class
         for(int i = 0; i < lineCounter; i++)
@@ -96,21 +95,21 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
                 s->setWhere(this->getWhere());
                 s->updateStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet());
-                qDebug() << "Update Statement";
+
                 break;
 
             case 2:
 
                 s->setWhere(this->getWhere());
                 s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet());
-                qDebug() << "Insert Statement";
+
                 break;
 
             case 3:
 
                 s->setWhere(this->getWhere());
                 s->deleteStatement(data, file, lineCounter, 0);
-                qDebug() << "Delete Statement";
+
                 break;
         }
         //  - /Users/Personal/Git/query-builder-2/suspects.txt
@@ -143,13 +142,11 @@ bool Data::validateColumns(QString s){
     QTextStream read(&dataFile);
 
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "Counting lines\n";
 
         //count lines
         countLines(&read);
         dataFile.reset();
 
-        qDebug() << "Counting words\n";
         //count words
         countWords(&dataFile);
 
@@ -256,8 +253,6 @@ void Data::countLines(QTextStream *in){
         line = in->readLine();
         lineCounter++;
 
-        qDebug() << "Line: " << lineCounter << " " << line;
-
     }
     while(!line.isNull());
 }
@@ -279,7 +274,6 @@ void Data::countWords(QFile *dataFile){
         foreach(QString word, line.split(',')){
 
             wordCounter++;
-            qDebug() << "Word " << wordCounter  << ": " << word ;
         }
 
     }

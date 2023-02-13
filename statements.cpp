@@ -251,13 +251,13 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
     switch(columnsSet){
         case 0:         // columns undefined
 
-            qDebug() << "Entered insert format case";
             _insert = "INSERT INTO  {table_name} (";
             for(int i = 0; i < wordPerLine; i++){
 
                  (i == wordPerLine-1) ? _insert += "`column_name`)\n" : _insert += "`column_name`,";
             }
-         break;
+
+            break;
 
         case 1:         //  columns defined
 
@@ -267,13 +267,16 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
                 (i == columns->size()-1) ? _insert += (getColumn(columns, i) += ")\n") : _insert += (getColumn(columns, i) += ",");
 
             }
-        break;
+
+            break;
     }
 }
 
 
 // delete statement
 void Statements::formatColumnsDelete(QVector<QString> *columns, int index, bool columnsSet){
+
+
 
 
 }
