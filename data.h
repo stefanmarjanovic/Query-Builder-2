@@ -19,6 +19,7 @@ public:
 
     Data();
     ~Data();
+    bool checkColumnsSet();
     bool parseText(QString i);
     bool generate(QString inputPath, QString outputPath, int queryOption);
     bool writeToFile(QVector<QList<QString>> data, QString outputPath, int queryOption);
@@ -50,8 +51,8 @@ private:
     QVector<QString> columns;
     QMessageBox alert;
     QString _where;
-    int wordCounter;
     int lineCounter;
+    int wordCounter;
     int querySelector;
 
 

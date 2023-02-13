@@ -13,15 +13,17 @@ public:
 
     Statements();
     ~Statements();
-    bool deleteStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber);
-    bool insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter);
-    bool updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter);
+    bool deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, int columnIndex);
+    bool insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet);
+    bool updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet);
     QString getWhere();
-    QString getNextColumn(QVector<QString> *columns, int index);
+    QString getColumn(QVector<QString> *columns, int index);
     QString validateTextString(QString w);
+    QString selectStatement();
     void setWhere(QString s);
-    void formatColumns(QVector<QString> *columns, int index, int queryType);
-
+    void formatColumnsUpdate(QVector<QString> *columns, int index, bool columnsSet);
+    void formatColumnsInsert(QVector<QString> *columns, bool columnsSet, int wordPerLine);
+    void formatColumnsDelete(QVector<QString> *columns, int index, bool columnsSet);
 
 private:
 
@@ -31,6 +33,8 @@ private:
     QString _update;
     QString _value;
     QString _where;
+    bool orderBy;
+    bool groupBy;
     int whereActive;
     bool columnsSet;
 

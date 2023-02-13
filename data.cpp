@@ -22,6 +22,17 @@ Data::~Data(){
 
 
 /*
+ *  CHECK COLUMNS SET
+ *  return true if the user has input column names
+ */
+bool Data::checkColumnsSet(){
+
+    return !columns.isEmpty();
+}
+
+
+
+/*
  *  READ TEXT FILE
  *  Reads the text file & counts the words when the file path is added but does not trigger the output yet.
  */
@@ -34,7 +45,6 @@ bool Data::parseText(QString i){
         qDebug() << "File found successfully.\nReading file in progress\n";
 
         //read line into Class
-        qDebug() << "Parse Text Line Count" << lineCounter;
         for(int i = 0; i < lineCounter; i++)
         {
             QByteArray line = dataFile.readLine();
@@ -85,21 +95,21 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
             case 1:
 
                 s->setWhere(this->getWhere());
-                s->updateStatement(data, columns, file, lineCounter, wordCounter);
+                s->updateStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet());
                 qDebug() << "Update Statement";
                 break;
 
             case 2:
 
                 s->setWhere(this->getWhere());
-                s->insertStatement(data, columns, file, lineCounter, wordCounter);
+                s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet());
                 qDebug() << "Insert Statement";
                 break;
 
             case 3:
 
                 s->setWhere(this->getWhere());
-                s->deleteStatement(data, columns, file, lineCounter);
+                s->deleteStatement(data, file, lineCounter, 0);
                 qDebug() << "Delete Statement";
                 break;
         }
@@ -360,8 +370,6 @@ QString Data::getColumnList(int position){
  */
 int Data::getTotalWordsPerLine(){
 
-    qDebug() << "Column Count in Data class: " << (wordCounter / lineCounter);
-
     return (wordCounter / lineCounter);
 }
 
@@ -373,6 +381,7 @@ int Data::getTotalWordsPerLine(){
  */
 void Data::clearList(){
 
-    qDebug() << "Clear columns list";
     columns.clear();
 }
+
+
