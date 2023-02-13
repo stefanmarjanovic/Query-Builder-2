@@ -71,3 +71,7 @@ Thumbs.db
 *.dll
 *.exe
 
+insert-users.sql
+sapusers.csv
+update-users.sql
+insert-users.sql
