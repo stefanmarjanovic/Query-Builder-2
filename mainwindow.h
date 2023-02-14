@@ -59,6 +59,7 @@ public slots:
     void clearColumnToList();
     void onBackColumnList();
     void inputTextadded();
+    void getSelectedColumn();
 
 signals:
 

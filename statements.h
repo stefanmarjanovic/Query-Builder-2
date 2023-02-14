@@ -13,7 +13,7 @@ public:
 
     Statements();
     ~Statements();
-    bool deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, int columnIndex);
+    bool deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, QString column,int columnIndex);
     bool insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet);
     bool updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet);
     QString getWhere();
@@ -23,7 +23,6 @@ public:
     void setWhere(QString s);
     void formatColumnsUpdate(QVector<QString> *columns, int index, bool columnsSet);
     void formatColumnsInsert(QVector<QString> *columns, bool columnsSet, int wordPerLine);
-    void formatColumnsDelete(QVector<QString> *columns, int index, bool columnsSet);
 
 private:
 

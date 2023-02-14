@@ -27,14 +27,16 @@ Statements::~Statements(){
 *   MYSQL DELETE STATEMENT
 *   drop rows based on the first column of data
 */
-bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, int columnIndex){
+bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, QString column, int columnIndex){
 
     QTextStream stream(&file);
+
+    qDebug() << "Column Index: " << columnIndex << " " << column;
 
     for(int i = 0; i < lineNumber; i++)
     {
        stream << _delete;
-       stream << _where << " ";
+       stream << _where << " " << column << " = ";
        stream << validateTextString(data[i][columnIndex]) << ";\n\n";
        qDebug() << data[i][columnIndex] << ";\n\n";
     }
@@ -161,7 +163,7 @@ QString Statements::getColumn(QVector<QString> *columns, int index){
 
     QString w = columns->at(index);
 
-    return (!w.isEmpty() ? w : _column );
+    return (!w.isEmpty() ? w : _column = "`column_name`" );
 }
 
 
@@ -271,13 +273,3 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
             break;
     }
 }
-
-
-// delete statement
-void Statements::formatColumnsDelete(QVector<QString> *columns, int index, bool columnsSet){
-
-
-
-
-}
-

@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent, Data *d)
     QObject::connect(cd.addBtn, &QPushButton::clicked, this, &MainWindow::addColumnToList);
     QObject::connect(cd.clearBtn, &QPushButton::clicked, this, &MainWindow::clearColumnToList);
     QObject::connect(cd.backBtn, &QPushButton::clicked, this, &MainWindow::onBackColumnList);
+    QObject::connect(cd.listWidget, &QListWidget::itemClicked, this, &MainWindow::getSelectedColumn);
     QObject::connect(ui->inputPath, &QLineEdit::editingFinished, this, &MainWindow::inputTextadded);
 
 }
@@ -187,7 +188,6 @@ void MainWindow::addColumnToList(){
     try {
         int totalColumns = dt->getTotalWordsPerLine();
 
-
         if(cd.listWidget->count() < totalColumns){
 
             QString c = columnInput.getText(0,"Add Column","Enter column name:");
@@ -225,4 +225,13 @@ void MainWindow::inputTextadded(){
     (dt->validateFile(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
 
     if(dt->validateFile(this->getInputPath()) != false) dt->validateColumns(this->getInputPath());
+}
+
+void MainWindow::getSelectedColumn(){
+
+    QString s = cd.listWidget->currentItem()->text();
+    dt->getColumnIndex(s.toInt());
+
+    qDebug() << "column selected";
+
 }

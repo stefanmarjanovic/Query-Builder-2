@@ -36,6 +36,7 @@ public:
     void countLines(QTextStream *in);
     void countWords(QFile *dataFile);
     void debugMatrix(QVector<QList<QString>> data);
+    void getColumnIndex(int i);
     void setAlert(QString s);
     void setWhere(QString s);
     void splitLine(QByteArray line);
@@ -54,6 +55,7 @@ private:
     int lineCounter;
     int wordCounter;
     int querySelector;
+    int columnListSelected;
 
 
 };

@@ -9,6 +9,8 @@ Data::Data()
     wordCounter = -1;
     lineCounter = -1;
     querySelector = -1;             // no current selection
+    columnListSelected = 0;
+    _where = "";
     qDebug() << "Data Constructor called";
 
 }
@@ -106,9 +108,9 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
                 break;
 
             case 3:
-
+                qDebug() << "Entered delete";
                 s->setWhere(this->getWhere());
-                s->deleteStatement(data, file, lineCounter, 0);
+                s->deleteStatement(data, file, lineCounter, getNextColumn(columnListSelected),columnListSelected);
 
                 break;
         }
@@ -187,7 +189,10 @@ bool Data::validateFile(QString s){
  */
 QString Data::getNextColumn(int i){
 
-    return columns[i];
+    QString col;
+    (!columns.empty()) ? (col = columns[i]) : (col =  "`column_name`");
+
+    return col;
 }
 
 
@@ -365,6 +370,17 @@ QString Data::getColumnList(int position){
 int Data::getTotalWordsPerLine(){
 
     return (wordCounter / lineCounter);
+}
+
+
+
+/*
+ *  GET COLUMNS INDEX
+ *  set the position number of the selected column
+ */
+void Data::getColumnIndex(int i){
+
+    columnListSelected = i-1;
 }
 
 
