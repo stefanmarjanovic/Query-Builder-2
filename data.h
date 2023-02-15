@@ -29,7 +29,6 @@ public:
     QString getNextColumn(int i);
     QString trimRegex(QString s);
     QString trim(QString s);
-    QString getColumnList(int position);
     int getTotalWordsPerLine();
     void addColumnToList(QString c);
     void clearList();

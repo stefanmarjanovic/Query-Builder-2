@@ -352,16 +352,6 @@ void Data::splitLine(QByteArray line){
 }
 
 
-/*
- *  RETURN COLUMN INDEX
- *  retrieve a value at the index of the column list
- */
-QString Data::getColumnList(int position){
-
-    return columns[position];
-}
-
-
 
 /*
  *  RETURN THE NUMBER OF WORDS PER LINE

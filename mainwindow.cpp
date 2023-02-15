@@ -232,6 +232,4 @@ void MainWindow::getSelectedColumn(){
     QString s = cd.listWidget->currentItem()->text();
     dt->getColumnIndex(s.toInt());
 
-    qDebug() << "column selected";
-
 }
