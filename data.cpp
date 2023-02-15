@@ -118,7 +118,6 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
 
         setAlert("File exported successfully.");
-        qDebug() << "File exported successfully";
     }
     else {
 
@@ -284,7 +283,6 @@ void Data::countWords(QFile *dataFile){
     }
     while(!line.isNull());
 
-    qDebug() << "Total Words: " << wordCounter;
 }
 
 

@@ -3,21 +3,21 @@
 #include "ui_wherebox.h"
 
 
-MainWindow::MainWindow(QWidget *parent, Data *d)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     //UI instantiation
     ui->setupUi(this);
+    this->setWindowTitle("SQL Injector");
+    this->setWindowIcon(QIcon(QPixmap(":icon.icns")));
+
+    //Dialog Box instantiation
     wui = new QDialog();
     cdui = new QDialog();
     cd.setupUi(cdui);
     wd.setupUi(wui);
     queryType = -1;
-
-    //User-defined Class
-    d = new Data();
-    dt = d; //Data
 
     //Create connections between UI, slots & functions
     QObject::connect(ui->submitBtn, &QPushButton::clicked, this, &MainWindow::onGenerateClicked);
@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent, Data *d)
 
 MainWindow::~MainWindow()
 {
-    qDebug() << "MainWindow delete constructor activated";
+    qDebug() << "MainWindow destructor called";
     delete ui;
 }
 
@@ -46,6 +46,7 @@ MainWindow::~MainWindow()
 /*
 *   TRIM STRING
 *   remove trailing spaces from a word
+*   params QString s
 */
 QString MainWindow::trim(QString s){
 
@@ -61,8 +62,6 @@ QString MainWindow::trim(QString s){
 QString MainWindow::getInputPath(){
 
     inputFilename = ui->inputPath->text();
-
-    qDebug() << "File Input Path: " << ui->inputPath->text();
 
     return inputFilename;
 }
@@ -147,6 +146,7 @@ void MainWindow::onGenerateClicked(){
 
 void MainWindow::onAddWhereClicked(){          //open popup to add where clause
 
+    wui->setWindowTitle("Where Clause");
     wui->show();
 }
 
@@ -168,7 +168,7 @@ void MainWindow::onDeleteClicked(){
 
     queryType = 3;
     setButtonChecked(queryType);
-    ui->addWhereBtn->setEnabled(true);
+    ui->addWhereBtn->setEnabled(false);
 }
 
 void MainWindow::onWhereSubmitted(){
@@ -178,6 +178,7 @@ void MainWindow::onWhereSubmitted(){
 
 void MainWindow::onViewColumnClick(){
 
+    cdui->setWindowTitle("Column List");
     cdui->show();
 }
 
@@ -222,9 +223,21 @@ void MainWindow::onBackColumnList(){
 
 void MainWindow::inputTextadded(){
 
-    (dt->validateFile(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
+    //try catch
+    try {
+        //set border color to red if file is invalid
+        (dt->validateFile(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
 
-    if(dt->validateFile(this->getInputPath()) != false) dt->validateColumns(this->getInputPath());
+        //Create a new instance of Data class
+        dt = new Data();
+        if(dt->validateFile(this->getInputPath()) != false) dt->validateColumns(this->getInputPath());
+        else throw(this->getInputPath());
+    }
+    catch(QString file){
+
+        qCritical() << "File or file path invalid: " <<  file;
+    }
+    qDebug() << "File Input Path: " << ui->inputPath->text();
 }
 
 void MainWindow::getSelectedColumn(){

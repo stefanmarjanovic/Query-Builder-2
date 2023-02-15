@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    MainWindow(QWidget *parent = nullptr, Data *d = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QString getOutputPath();
     QString getInputPath();
