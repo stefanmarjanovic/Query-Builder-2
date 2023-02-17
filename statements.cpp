@@ -2,9 +2,9 @@
 
 Statements::Statements()
 {
-    _delete = "DELETE FROM {table_name}\n";
+    _delete = "DELETE FROM `table_name`\n";
     _column = "`column_name`";
-    _insert = "INSERT INTO  {table_name}()\n";
+    _insert = "INSERT INTO  `table_name`()\n";
     _update = "UPDATE {table_name}\n";
     _value  = "VALUES ";
     _where  = "WHERE ";
@@ -31,14 +31,11 @@ bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int
 
     QTextStream stream(&file);
 
-    qDebug() << "Column Index: " << columnIndex << " " << column;
-
     for(int i = 0; i < lineNumber; i++)
     {
        stream << _delete;
        stream << _where << " " << column << " = ";
        stream << validateTextString(data[i][columnIndex]) << ";\n\n";
-       qDebug() << data[i][columnIndex] << ";\n\n";
     }
     stream << "\n";
 
@@ -60,7 +57,6 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString>
 
     //check for columns
     columnsSet = isColSet;
-    qDebug() << "Columns set:" << columnsSet;
     int wordsPerLine = (wordCounter/lineNumber);
 
     //pass columns names, index (not required), query type
@@ -209,6 +205,19 @@ QString Statements::selectStatement(){
 
 
 /*
+ *  CLEAR WHERE CLAUSE
+ *  resets the where clause
+ */
+void Statements::clearWhere(){
+
+    _where = "WHERE ";
+
+    qDebug() << "STATEMENT CLASS where: " << _where;
+}
+
+
+
+/*
 *   SET WHERE CLAUSE
 *   set a where clause
 */
@@ -253,7 +262,7 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
     switch(columnsSet){
         case 0:         // columns undefined
 
-            _insert = "INSERT INTO  {table_name} (";
+            _insert = "INSERT INTO  `table_name` (";
             for(int i = 0; i < wordPerLine; i++){
 
                  (i == wordPerLine-1) ? _insert += "`column_name`)\n" : _insert += "`column_name`,";
@@ -263,7 +272,7 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
 
         case 1:         //  columns defined
 
-            _insert = "INSERT INTO  {table_name} (";
+            _insert = "INSERT INTO  `table_name` (";
             for(int i = 0; i < columns->size(); i++){
 
                 (i == columns->size()-1) ? _insert += (getColumn(columns, i) += ")\n") : _insert += (getColumn(columns, i) += ",");

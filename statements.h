@@ -1,7 +1,6 @@
 #ifndef STATEMENTS_H
 #define STATEMENTS_H
 
-//#include "mainwindow.h"
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
@@ -20,6 +19,7 @@ public:
     QString getColumn(QVector<QString> *columns, int index);
     QString validateTextString(QString w);
     QString selectStatement();
+    void clearWhere();
     void setWhere(QString s);
     void formatColumnsUpdate(QVector<QString> *columns, int index, bool columnsSet);
     void formatColumnsInsert(QVector<QString> *columns, bool columnsSet, int wordPerLine);

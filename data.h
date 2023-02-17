@@ -32,6 +32,7 @@ public:
     int getTotalWordsPerLine();
     void addColumnToList(QString c);
     void clearList();
+    void clearWhere();
     void countLines(QTextStream *in);
     void countWords(QFile *dataFile);
     void debugMatrix(QVector<QList<QString>> data);

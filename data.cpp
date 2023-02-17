@@ -108,7 +108,7 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
                 break;
 
             case 3:
-                qDebug() << "Entered delete";
+
                 s->setWhere(this->getWhere());
                 s->deleteStatement(data, file, lineCounter, getNextColumn(columnListSelected),columnListSelected);
 
@@ -327,6 +327,7 @@ void Data::setAlert(QString s){
 void Data::setWhere(QString s){
 
     _where = s;
+
 } 
 
 
@@ -383,3 +384,15 @@ void Data::clearList(){
 }
 
 
+
+/*
+ *  CLEAR WHERE CLAUSE
+ *  calls the statement class to reset the where clause
+ */
+void Data::clearWhere(){
+
+    //_where.clear();
+    s->clearWhere();
+
+    qDebug() << "DATA CLASS where: " << this->_where;
+}
