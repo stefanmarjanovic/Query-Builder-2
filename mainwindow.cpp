@@ -19,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
     wd.setupUi(wui);
     queryType = -1;
 
+    //Disable buttons until text file is added
+    ui->addWhereBtn->setEnabled(false);
+    ui->submitBtn->setEnabled(false);
+    ui->viewColBtn->setEnabled(false);
+
     //Create connections between UI, slots & functions
     QObject::connect(ui->submitBtn, &QPushButton::clicked, this, &MainWindow::onGenerateClicked);
     QObject::connect(ui->updateBtn, &QPushButton::clicked, this, &MainWindow::onUpdateClicked);
@@ -96,6 +101,36 @@ int MainWindow::getSelection(){
 
 
 /*
+ *  RESET UI BUTTONS
+ *  if the user removes data input reset the UI buttons to prevent adding inputs while no valid data source is present
+ *  params
+ *
+ *  bool active
+ */
+void MainWindow::resetButtons(bool active){
+
+    switch(active){
+
+        case 0:
+            queryType = -1;
+            ui->addWhereBtn->setEnabled(false);
+            ui->submitBtn->setEnabled(false);
+            ui->viewColBtn->setEnabled(false);
+            break;
+
+        case 1:
+            queryType = -1;
+            ui->addWhereBtn->setEnabled(false);
+            ui->submitBtn->setEnabled(true);
+            ui->viewColBtn->setEnabled(true);
+            break;
+    }
+
+}
+
+
+
+/*
 *   SET WHERE CLAUSE
 *   Get the user input from the where popup box and set it as a private string
 */
@@ -116,26 +151,34 @@ void MainWindow::setButtonChecked(int querySelection){
     switch(querySelection){
 
         case 1:  // Update
+
             ui->deleteBtn->setChecked(0);
             ui->insertBtn->setChecked(0);
-            ui->updateBtn->setChecked(1);
+            (dt->validateFile(this->getInputPath()) == true) ? ui->updateBtn->setChecked(1) :  ui->updateBtn->setChecked(0);
 
             break;
 
         case 2: // Insert
+
             ui->deleteBtn->setChecked(0);
-            ui->insertBtn->setChecked(1);
+            (dt->validateFile(this->getInputPath()) == true) ? ui->insertBtn->setChecked(1) :  ui->insertBtn->setChecked(0);
             ui->updateBtn->setChecked(0);
 
             break;
 
         case 3: // Delete
-            ui->deleteBtn->setChecked(1);
+
+            (dt->validateFile(this->getInputPath()) == true) ? ui->deleteBtn->setChecked(1) : ui->deleteBtn->setChecked(0);
             ui->insertBtn->setChecked(0);
             ui->updateBtn->setChecked(0);
 
             break;
-    }
+
+        default:
+            ui->deleteBtn->setChecked(0);
+            ui->insertBtn->setChecked(0);
+            ui->updateBtn->setChecked(0);
+      }
 }
 
 // Slots
@@ -144,27 +187,28 @@ void MainWindow::onGenerateClicked(){
     dt->generate(this->getInputPath(), this->getOutputPath(), this->queryType);
 }
 
-void MainWindow::onAddWhereClicked(){          //open popup to add where clause
+void MainWindow::onAddWhereClicked(){          //open dialog box to add where clause
 
     wui->setWindowTitle("Where Clause");
     wui->show();
+    if(wd.textEdit->toPlainText().isEmpty()) dt->clearWhere();
 }
 
-void MainWindow::onUpdateClicked(){
+void MainWindow::onUpdateClicked(){            //set update statement selected
 
     queryType = 1;
     setButtonChecked(queryType);
-    ui->addWhereBtn->setEnabled(true);
+    (dt->validateFile(this->getInputPath()) == true) ? ui->addWhereBtn->setEnabled(true) : ui->addWhereBtn->setEnabled(false);
 }
 
-void MainWindow::onInsertClicked(){
+void MainWindow::onInsertClicked(){             //set insert statement selected
 
     queryType = 2;
     setButtonChecked(queryType);
     ui->addWhereBtn->setEnabled(false);
 }
 
-void MainWindow::onDeleteClicked(){
+void MainWindow::onDeleteClicked(){             //set delete statement selected
 
     queryType = 3;
     setButtonChecked(queryType);
@@ -223,21 +267,45 @@ void MainWindow::onBackColumnList(){
 
 void MainWindow::inputTextadded(){
 
-    //try catch
-    try {
-        //set border color to red if file is invalid
-        (dt->validateFile(this->getInputPath()) == false) ? (ui->inputPath->setStyleSheet("border: 1px solid red")) : (ui->inputPath->setStyleSheet(""));
+    bool i = dt->validateFile(this->getInputPath());
 
-        //Create a new instance of Data class
-        dt = new Data();
-        if(dt->validateFile(this->getInputPath()) != false) dt->validateColumns(this->getInputPath());
-        else throw(this->getInputPath());
+    try {
+        switch(i){
+            case 0: // no source file detected
+
+                // set red border
+                ui->inputPath->setStyleSheet("border: 1px solid red");
+
+                //deselet UI buttons
+                queryType = -1;
+                setButtonChecked(queryType);
+                resetButtons(i);
+
+
+
+                throw(this->getInputPath());
+
+                break;
+
+            case 1: // source file found
+
+                // reset border
+                ui->inputPath->setStyleSheet("");
+
+                //Create a new instance of Data class
+                dt = new Data();
+                dt->validateColumns(this->getInputPath());
+
+                // setButtonChecked(queryType);
+                resetButtons(i);
+
+                break;
+        }
     }
     catch(QString file){
 
-        qCritical() << "File or file path invalid: " <<  file;
+        qCritical() << "File or filename invalid: " <<  file;
     }
-    qDebug() << "File Input Path: " << ui->inputPath->text();
 }
 
 void MainWindow::getSelectedColumn(){

@@ -2,7 +2,7 @@
 #define DATA_H
 
 #include "statements.h"
-#include "ui_mainwindow.h"
+//#include "ui_mainwindow.h"
 #include <QDebug>
 #include <QFile>
 #include <QList>
@@ -46,7 +46,7 @@ public:
 private:
 
     const char separator = ',';
-    Ui::MainWindow *ui;
+ //   Ui::MainWindow *ui;
     Statements *s;
     QVector<QList<QString>> matrix;
     QVector<QString> columns;

@@ -29,6 +29,7 @@ public:
     QString getInputPath();
     QString trim(QString s);
     int getSelection();
+    void resetButtons(bool active);
     void setWhereClause();
     void setButtonChecked(int querySelection);
     void setAlert(QString s);
