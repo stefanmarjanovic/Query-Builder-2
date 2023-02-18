@@ -49,18 +49,23 @@ private:
 
 public slots:
 
-    void onGenerateClicked();
-    void onAddWhereClicked();
-    void onUpdateClicked();
-    void onInsertClicked();
-    void onDeleteClicked();
-    void onWhereSubmitted();
-    void onViewColumnClick();
     void addColumnToList();
     void clearColumnToList();
-    void onBackColumnList();
-    void inputTextadded();
     void getSelectedColumn();
+    void getTableName();
+    void inputTextadded();
+    void onAddWhereClicked();
+    void onBackColumnList();
+    void onDeleteClicked();
+    void onGenerateClicked();
+    void onInsertClicked();
+    void onUpdateClicked();
+    void onWhereSubmitted();
+    void onViewColumnClick();
+
+
+
+
 
 signals:
 

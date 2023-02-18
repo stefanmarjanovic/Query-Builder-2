@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(cd.backBtn, &QPushButton::clicked, this, &MainWindow::onBackColumnList);
     QObject::connect(cd.listWidget, &QListWidget::itemClicked, this, &MainWindow::getSelectedColumn);
     QObject::connect(ui->inputPath, &QLineEdit::editingFinished, this, &MainWindow::inputTextadded);
+    QObject::connect(ui->inputTableName, &QLineEdit::editingFinished, this, &MainWindow::getTableName);
 
 }
 
@@ -181,51 +182,9 @@ void MainWindow::setButtonChecked(int querySelection){
       }
 }
 
+
+
 // Slots
-void MainWindow::onGenerateClicked(){
-
-    dt->generate(this->getInputPath(), this->getOutputPath(), this->queryType);
-}
-
-void MainWindow::onAddWhereClicked(){          //open dialog box to add where clause
-
-    wui->setWindowTitle("Where Clause");
-    wui->show();
-    if(wd.textEdit->toPlainText().isEmpty()) dt->clearWhere();
-}
-
-void MainWindow::onUpdateClicked(){            //set update statement selected
-
-    queryType = 1;
-    setButtonChecked(queryType);
-    (dt->validateFile(this->getInputPath()) == true) ? ui->addWhereBtn->setEnabled(true) : ui->addWhereBtn->setEnabled(false);
-}
-
-void MainWindow::onInsertClicked(){             //set insert statement selected
-
-    queryType = 2;
-    setButtonChecked(queryType);
-    ui->addWhereBtn->setEnabled(false);
-}
-
-void MainWindow::onDeleteClicked(){             //set delete statement selected
-
-    queryType = 3;
-    setButtonChecked(queryType);
-    ui->addWhereBtn->setEnabled(false);
-}
-
-void MainWindow::onWhereSubmitted(){
-
-    this->setWhereClause();
-}
-
-void MainWindow::onViewColumnClick(){
-
-    cdui->setWindowTitle("Column List");
-    cdui->show();
-}
-
 void MainWindow::addColumnToList(){
 
 
@@ -260,10 +219,22 @@ void MainWindow::clearColumnToList(){
     cd.listWidget->clear();
 }
 
-void MainWindow::onBackColumnList(){
 
-    cdui->hide();
+void MainWindow::getSelectedColumn(){
+
+    QString s = cd.listWidget->currentItem()->text();
+    dt->getColumnIndex(s.toInt());
+
 }
+
+
+void MainWindow::getTableName(){
+
+    QString s = ui->inputTableName->text();
+    dt->setTableName(s);
+
+}
+
 
 void MainWindow::inputTextadded(){
 
@@ -308,9 +279,58 @@ void MainWindow::inputTextadded(){
     }
 }
 
-void MainWindow::getSelectedColumn(){
 
-    QString s = cd.listWidget->currentItem()->text();
-    dt->getColumnIndex(s.toInt());
+void MainWindow::onAddWhereClicked(){          //open dialog box to add where clause
 
+    wui->setWindowTitle("Where Clause");
+    wui->show();
+    if(wd.textEdit->toPlainText().isEmpty()) dt->clearWhere();
+}
+
+
+void MainWindow::onBackColumnList(){
+
+    cdui->hide();
+}
+
+
+void MainWindow::onDeleteClicked(){             //set delete statement selected
+
+    queryType = 3;
+    setButtonChecked(queryType);
+    ui->addWhereBtn->setEnabled(false);
+}
+
+
+void MainWindow::onGenerateClicked(){
+
+    dt->generate(this->getInputPath(), this->getOutputPath(), this->queryType);
+}
+
+
+void MainWindow::onInsertClicked(){             //set insert statement selected
+
+    queryType = 2;
+    setButtonChecked(queryType);
+    ui->addWhereBtn->setEnabled(false);
+}
+
+
+void MainWindow::onUpdateClicked(){            //set update statement selected
+
+    queryType = 1;
+    setButtonChecked(queryType);
+    (dt->validateFile(this->getInputPath()) == true) ? ui->addWhereBtn->setEnabled(true) : ui->addWhereBtn->setEnabled(false);
+}
+
+
+void MainWindow::onWhereSubmitted(){
+
+    this->setWhereClause();
+}
+
+void MainWindow::onViewColumnClick(){
+
+    cdui->setWindowTitle("Column List");
+    cdui->show();
 }

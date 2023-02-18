@@ -2,10 +2,11 @@
 
 Statements::Statements()
 {
-    _delete = "DELETE FROM `table_name`\n";
+    _delete = "DELETE FROM";
     _column = "`column_name`";
     _insert = "INSERT INTO  `table_name`()\n";
-    _update = "UPDATE {table_name}\n";
+    _table = "`table_name`";
+    _update = "UPDATE ";
     _value  = "VALUES ";
     _where  = "WHERE ";
     orderBy = 0;
@@ -27,13 +28,15 @@ Statements::~Statements(){
 *   MYSQL DELETE STATEMENT
 *   drop rows based on the first column of data
 */
-bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, QString column, int columnIndex){
+bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, QString column, int columnIndex, QString table){
 
     QTextStream stream(&file);
+    (!table.isEmpty()) ? _table = table : _table;           //use table name if it is set
+    _where = "WHERE ";                                      //reset where clause
 
     for(int i = 0; i < lineNumber; i++)
     {
-       stream << _delete;
+       stream << _delete << " " << _table << "\n";
        stream << _where << " " << column << " = ";
        stream << validateTextString(data[i][columnIndex]) << ";\n\n";
     }
@@ -51,16 +54,17 @@ bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int
 *   MYSQL INSERT STATEMENT
 *   output data into a complete insert statement format
 */
-bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet){
+bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet, QString table){
 
     QTextStream stream(&file);    
+    (!table.isEmpty()) ? _table = table : _table;           //use table name if it is set
 
     //check for columns
     columnsSet = isColSet;
     int wordsPerLine = (wordCounter/lineNumber);
 
     //pass columns names, index (not required), query type
-    formatColumnsInsert(&columns, columnsSet, wordsPerLine);
+    formatColumnsInsert(&columns, columnsSet, wordsPerLine, _table);
     stream << _insert;
 
     for(int i = 0; i < lineNumber; i++)
@@ -68,12 +72,14 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString>
         stream << _value << " (";
         for(int o = 0; o < wordsPerLine; o++){
 
+            //if not last word in row add a comma
             (o != (wordsPerLine)-1) ? (stream << validateTextString(data[i][o]) << ",") : (stream << validateTextString(data[i][o]));
         }
 
+        //print closing bracket and comma if not last line
         (i == lineNumber-1) ? (stream << ")") : (stream << "),\n");
     }
-    stream << ";\n";
+    stream << ";\n\n";
 
     file.flush();
     file.close();
@@ -87,9 +93,10 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString>
 *   MYSQL UPDATE STATEMENT
 *   compile a list of data to update
 */
-bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet){
+bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet,  QString table){
 
     QTextStream stream(&file);
+    (!table.isEmpty()) ? _table = table : _table;           //use table name if it is set
 
     //check for columns
     columnsSet =  isColSet;
@@ -99,13 +106,13 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
     for(int i = 0; i < lineNumber; i++)
     {
-        stream << _update;
+        stream << _update << table << "\n";
 
         switch(whereActive){
 
             case 1:
 
-                for(int o = 0; o < (wordCounter/lineNumber); o++){ // row data
+                for(int o = 0; o < (wordCounter/lineNumber); o++){ // print row data
 
                     formatColumnsUpdate(&columns,o,columnsSet);
                     //IF First line                                                                                 //ELSE if not last word of row                                                                               // if last word of row
@@ -118,7 +125,7 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
             default:
 
-                for(int o = 0; o < (wordCounter/lineNumber); o++){ // row data
+                for(int o = 0; o < (wordCounter/lineNumber); o++){ // print row data
 
                     formatColumnsUpdate(&columns,o,columnsSet);
                     //IF First line                                                                                 //ELSE if not last word of row                                                                               // if last word of row
@@ -191,8 +198,6 @@ QString Statements::selectStatement(){
     QString columns;
     QString tableName;
     QString where;
-    //QString orderBy;
-    //QString groupBy;
 
     QString select = QString("SELECT ").arg(columns).append(" FROM ").arg(tableName);
 
@@ -257,12 +262,12 @@ void Statements::formatColumnsUpdate(QVector<QString> *columns, int index, bool 
 
 
 // insert statement
-void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, int wordPerLine){
+void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, int wordPerLine, QString table){
 
     switch(columnsSet){
         case 0:         // columns undefined
 
-            _insert = "INSERT INTO  `table_name` (";
+            _insert = QString("INSERT INTO  ").append(table).append(" (");
             for(int i = 0; i < wordPerLine; i++){
 
                  (i == wordPerLine-1) ? _insert += "`column_name`)\n" : _insert += "`column_name`,";
@@ -272,7 +277,7 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
 
         case 1:         //  columns defined
 
-            _insert = "INSERT INTO  `table_name` (";
+            _insert = QString("INSERT INTO  ").append(table).append(" (");
             for(int i = 0; i < columns->size(); i++){
 
                 (i == columns->size()-1) ? _insert += (getColumn(columns, i) += ")\n") : _insert += (getColumn(columns, i) += ",");

@@ -96,21 +96,21 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
             case 1:
 
                 s->setWhere(this->getWhere());
-                s->updateStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet());
+                s->updateStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet(), _tableName);
 
                 break;
 
             case 2:
 
                 s->setWhere(this->getWhere());
-                s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet());
+                s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet(), _tableName);
 
                 break;
 
             case 3:
 
                 s->setWhere(this->getWhere());
-                s->deleteStatement(data, file, lineCounter, getNextColumn(columnListSelected),columnListSelected);
+                s->deleteStatement(data, file, lineCounter, getNextColumn(columnListSelected),columnListSelected, _tableName);
 
                 break;
         }
@@ -316,6 +316,25 @@ void Data::setAlert(QString s){
 
     alert.setText(s);
     alert.show();
+}
+
+
+/*
+ *  SET TABLE NAME
+ *  get the table name from the main window
+ */
+void Data::setTableName(QString s){
+
+    QString table = s;
+
+    if(!table.isEmpty()){
+
+        _tableName = table.prepend("`").append("`");
+    } else {
+
+        _tableName = "`table_name`";
+    }
+
 }
 
 

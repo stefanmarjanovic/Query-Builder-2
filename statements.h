@@ -12,9 +12,9 @@ public:
 
     Statements();
     ~Statements();
-    bool deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, QString column,int columnIndex);
-    bool insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet);
-    bool updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet);
+    bool deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, QString column,int columnIndex, QString table);
+    bool insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet, QString table);
+    bool updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet, QString table);
     QString getWhere();
     QString getColumn(QVector<QString> *columns, int index);
     QString validateTextString(QString w);
@@ -22,7 +22,7 @@ public:
     void clearWhere();
     void setWhere(QString s);
     void formatColumnsUpdate(QVector<QString> *columns, int index, bool columnsSet);
-    void formatColumnsInsert(QVector<QString> *columns, bool columnsSet, int wordPerLine);
+    void formatColumnsInsert(QVector<QString> *columns, bool columnsSet, int wordPerLine, QString table);
 
 private:
 
@@ -30,6 +30,7 @@ private:
     QString _column;
     QString _insert;
     QString _update;
+    QString _table;
     QString _value;
     QString _where;
     bool orderBy;
