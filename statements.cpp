@@ -13,13 +13,11 @@ Statements::Statements()
     groupBy = 0;
     whereActive = 0;
     columnsSet = false;
-    qDebug() << "Statement Constructor called";
 }
 
 Statements::~Statements(){
 
     delete this;
-    qDebug() << "Statements delete constructor activated";
 }
 
 
@@ -133,7 +131,7 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
                 }
 
-                stream << "\n\n";
+                stream << "\n";
                 break;
         }
     }
@@ -146,18 +144,6 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 };
 
 
-
-/*
-*   GET WHERE CLAUSE
-*   return where string
-*/
-QString Statements::getWhere(){
-
-    return (!_where.isEmpty()) ? _where : _where = ";\n";
-}
-
-
-
 /*
  *  PRINT NEXT COLUMN
  *  prints the column at the index if it has been initialised, otherwise print the {column} placeholder
@@ -167,6 +153,17 @@ QString Statements::getColumn(QVector<QString> *columns, int index){
     QString w = columns->at(index);
 
     return (!w.isEmpty() ? w : _column = "`column_name`" );
+}
+
+
+
+/*
+*   GET WHERE CLAUSE
+*   return where string
+*/
+QString Statements::getWhere(){
+
+    return (!_where.isEmpty()) ? _where : _where = ";\n";
 }
 
 
@@ -232,36 +229,12 @@ void Statements::setWhere(QString s){
 }
 
 
-
-
 /*
  *  FORMAT COLUMN
  *  Based on the type of query select format the columns in the appropriate format before printing
+ *
+ *  insert statement
  */
-// update statement
-void Statements::formatColumnsUpdate(QVector<QString> *columns, int index, bool columnsSet){
-
-    try{
-        if(columnsSet) {
-
-            _column = getColumn(columns, index);
-
-        } else {
-
-            throw (_column);
-            _column.clear();
-            _column = "`column_name`";
-        }
-
-    } catch(QString col){
-
-        qCritical() << "Columns uninstantiated" << col;
-
-    }
-}
-
-
-// insert statement
 void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, int wordPerLine, QString table){
 
     switch(columnsSet){
@@ -285,5 +258,29 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
             }
 
             break;
+    }
+}
+
+
+
+// update statement
+void Statements::formatColumnsUpdate(QVector<QString> *columns, int index, bool columnsSet){
+
+    try{
+        if(columnsSet) {
+
+            _column = getColumn(columns, index);
+
+        } else {
+
+            throw (_column);
+            _column.clear();
+            _column = "`column_name`";
+        }
+
+    } catch(QString col){
+
+        qCritical() << "Columns uninstantiated" << col;
+
     }
 }

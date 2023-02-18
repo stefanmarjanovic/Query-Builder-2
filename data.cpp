@@ -11,14 +11,13 @@ Data::Data()
     querySelector = -1;             // no current selection
     columnListSelected = 0;
     _where = "";
-    qDebug() << "Data Constructor called";
 
 }
 
 
 Data::~Data(){
 
-    qDebug() << "Data delete constructor activated";
+   //delete this;
 }
 
 
@@ -183,6 +182,18 @@ bool Data::validateFile(QString s){
 
 
 /*
+ *  GET WHERE CLAUSE
+ *  return where input string from wherediag box
+ */
+QString Data::getWhere(){
+
+
+    return _where;
+}
+
+
+
+/*
  *  RETURN THE NEXT COLUMN NAME
  *  retrieves the column name that will be passed to the statements for printing
  */
@@ -192,18 +203,6 @@ QString Data::getNextColumn(int i){
     (!columns.empty()) ? (col = columns[i]) : (col =  "`column_name`");
 
     return col;
-}
-
-
-
-/*
- *  GET WHERE CLAUSE
- *  return where input string from wherediag box
- */
-QString Data::getWhere(){
-
-
-    return _where;
 }
 
 
@@ -233,6 +232,17 @@ QString Data::trim(QString s){
 
 
 /*
+ *  RETURN THE NUMBER OF WORDS PER LINE
+ *  returns the amount of elements a.k.a words per line use for comparison
+ */
+int Data::getTotalWordsPerLine(){
+
+    return (wordCounter / lineCounter);
+}
+
+
+
+/*
  *  ADD COLUMN
  *  add string from UI to column list
  */
@@ -241,6 +251,29 @@ void Data::addColumnToList(QString c){
         QString col = c.prepend('`').append('`');
 
        columns.append(col);
+}
+
+
+
+/*
+ *  CLEAR COLUMNS
+ *  clear columns added to the columns array list
+ */
+void Data::clearList(){
+
+    columns.clear();
+}
+
+
+
+/*
+ *  CLEAR WHERE CLAUSE
+ *  calls the statement class to reset the where clause
+ */
+void Data::clearWhere(){
+
+    _where.clear();
+    s->clearWhere();
 }
 
 
@@ -309,6 +342,17 @@ void  Data::debugMatrix(QVector<QList<QString>> matrix){
 
 
 /*
+ *  GET COLUMNS INDEX
+ *  set the position number of the selected column
+ */
+void Data::getColumnIndex(int i){
+
+    columnListSelected = i-1;
+}
+
+
+
+/*
 *   ALERT MESSAGE BOX
 *   call this function to alert the user of any issues
 */
@@ -371,47 +415,3 @@ void Data::splitLine(QByteArray line){
 
 
 
-/*
- *  RETURN THE NUMBER OF WORDS PER LINE
- *  returns the amount of elements a.k.a words per line use for comparison
- */
-int Data::getTotalWordsPerLine(){
-
-    return (wordCounter / lineCounter);
-}
-
-
-
-/*
- *  GET COLUMNS INDEX
- *  set the position number of the selected column
- */
-void Data::getColumnIndex(int i){
-
-    columnListSelected = i-1;
-}
-
-
-
-/*
- *  CLEAR COLUMNS
- *  clear columns added to the columns array list
- */
-void Data::clearList(){
-
-    columns.clear();
-}
-
-
-
-/*
- *  CLEAR WHERE CLAUSE
- *  calls the statement class to reset the where clause
- */
-void Data::clearWhere(){
-
-    //_where.clear();
-    s->clearWhere();
-
-    qDebug() << "DATA CLASS where: " << this->_where;
-}
