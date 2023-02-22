@@ -309,6 +309,11 @@ void MainWindow::onGenerateClicked(){
 
     onCheckedBox();
     dt->generate(this->getInputPath(), this->getOutputPath(), this->queryType);
+
+    ui->inputPath->clear();
+    ui->outputPath->clear();
+    ui->checkBox->setChecked(false);
+    setButtonChecked(queryType);
 }
 
 
