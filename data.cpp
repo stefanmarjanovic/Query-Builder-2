@@ -91,6 +91,7 @@ bool Data::generate(QString inputPath, QString outputPath, int queryOption){
 
     parseText(inputPath);
     writeToFile(matrix,outputPath,queryOption);
+    this->reset();
 
     return true;
 }
@@ -291,7 +292,7 @@ void Data::addColumnToList(QString c){
  *  CLEAR COLUMNS
  *  clear columns added to the columns array list
  */
-void Data::clearList(){
+void Data::clearColumnList(){
 
     columns.clear();
 }
@@ -406,7 +407,24 @@ void Data::getFirstLine(QByteArray line){
 
 }
 
+/*
+ *  RESET
+ *  reset data class by running the constructor again
+ */
+void Data::reset(){
 
+    matrix.clear();
+    wordCounter = -1;       // no current selection
+    lineCounter = -1;
+    querySelector = -1;
+    columnListSelected = 0;
+    firstLine = 0;
+    _where = "";
+
+     qDebug() << "Lines reset: " << lineCounter;
+     qDebug() << "Words reset: " << wordCounter;
+     qDebug() << "Matrix reset: " << matrix.size();
+}
 
 /*
  *  FIRST LINE

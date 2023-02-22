@@ -38,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(cd.listWidget, &QListWidget::itemClicked, this, &MainWindow::getSelectedColumn);
     QObject::connect(ui->inputPath, &QLineEdit::editingFinished, this, &MainWindow::inputTextadded);
     QObject::connect(ui->inputTableName, &QLineEdit::editingFinished, this, &MainWindow::getTableName);
-    // get checkbox status
     QObject::connect(ui->checkBox, &QCheckBox::stateChanged, this, &MainWindow::onCheckedBox);
 }
 
@@ -217,7 +216,7 @@ void MainWindow::addColumnToList(){
 
 void MainWindow::clearColumnToList(){
 
-    dt->clearList();
+    dt->clearColumnList();
     cd.listWidget->clear();
 }
 

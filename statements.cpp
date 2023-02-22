@@ -3,7 +3,7 @@
 Statements::Statements()
 {
     _delete = "DELETE FROM";
-    _column = "`column_name`";
+    _column = "column_name";
     _insert = "INSERT INTO  `table_name`()\n";
     _table = "`table_name`";
     _update = "UPDATE ";
@@ -35,7 +35,7 @@ bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int
     for(int i = 0; i < lineNumber; i++)
     {
        stream << _delete << " " << _table << "\n";
-       stream << _where << " " << column << " = ";
+       stream << _where << " `" << column << "` = ";
        stream << validateTextString(data[i][columnIndex]) << ";\n\n";
     }
     stream << "\n";
@@ -114,7 +114,7 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
                     formatColumnsUpdate(&columns,o,columnsSet);
                     //IF First line                                                                                 //ELSE if not last word of row                                                                               // if last word of row
-                    (o == 0) ? (stream << "SET " <<  _column << " = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << _column << " = " << validateTextString(data[i][o]) << ", ") : (stream <<  _column << " = " << validateTextString(data[i][o]) << "\n");
+                    (o == 0) ? (stream << "SET `" <<  _column << "` = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << ", ") : (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << "\n");
 
                 }
 
@@ -127,7 +127,7 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
                     formatColumnsUpdate(&columns,o,columnsSet);
                     //IF First line                                                                                 //ELSE if not last word of row                                                                               // if last word of row
-                    (o == 0) ? (stream << "SET " <<  _column << " = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << _column << " = " << validateTextString(data[i][o]) << ", ") : (stream << _column << " = " << validateTextString(data[i][o]) << ";\n");
+                    (o == 0) ? (stream << "SET `" <<  _column << "` = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << ", ") : (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << ";\n");
 
                 }
 
@@ -253,7 +253,7 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
             _insert = QString("INSERT INTO  ").append(table).append(" (");
             for(int i = 0; i < columns->size(); i++){
 
-                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += ")\n") : _insert += (getColumn(columns, i) += ",");
+                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += "`)\n") : _insert += (getColumn(columns, i) += "`,");
 
             }
 

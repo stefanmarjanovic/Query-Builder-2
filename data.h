@@ -30,13 +30,14 @@ public:
     QString trim(QString s);
     int getTotalWordsPerLine();
     void addColumnToList(QString c);
-    void clearList();
+    void clearColumnList();
     void clearWhere();
     void countLines(QTextStream *in);
     void countWords(QFile *dataFile);
     void debugMatrix(QVector<QList<QString>> data);
     void getColumnIndex(int i);
     void getFirstLine(QByteArray line);
+    void reset();
     void setAlert(QString s);
     void setFirstLine(bool c);
     void setTableName(QString s);
