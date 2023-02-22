@@ -36,7 +36,9 @@ public:
     void countWords(QFile *dataFile);
     void debugMatrix(QVector<QList<QString>> data);
     void getColumnIndex(int i);
+    void getFirstLine(QByteArray line);
     void setAlert(QString s);
+    void setFirstLine(bool c);
     void setTableName(QString s);
     void setWhere(QString s);
     void splitLine(QByteArray line);
@@ -52,6 +54,7 @@ private:
     QMessageBox alert;
     QString _tableName;
     QString _where;
+    bool firstLine;
     int columnListSelected;
     int lineCounter;
     int querySelector;

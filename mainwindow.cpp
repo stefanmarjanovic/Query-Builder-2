@@ -38,7 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(cd.listWidget, &QListWidget::itemClicked, this, &MainWindow::getSelectedColumn);
     QObject::connect(ui->inputPath, &QLineEdit::editingFinished, this, &MainWindow::inputTextadded);
     QObject::connect(ui->inputTableName, &QLineEdit::editingFinished, this, &MainWindow::getTableName);
-
+    // get checkbox status
+    QObject::connect(ui->checkBox, &QCheckBox::stateChanged, this, &MainWindow::onCheckedBox);
 }
 
 MainWindow::~MainWindow()
@@ -251,9 +252,9 @@ void MainWindow::inputTextadded(){
                 //deselet UI buttons
                 queryType = -1;
                 setButtonChecked(queryType);
+
+                //set buttons unavailable
                 resetButtons(i);
-
-
 
                 throw(this->getInputPath());
 
@@ -264,11 +265,13 @@ void MainWindow::inputTextadded(){
                 // reset border
                 ui->inputPath->setStyleSheet("");
 
-                //Create a new instance of Data class
+                // Create a new instance of Data class
                 dt = new Data();
                 dt->validateColumns(this->getInputPath());
 
+
                 // setButtonChecked(queryType);
+                // set buttons available
                 resetButtons(i);
 
                 break;
@@ -305,6 +308,7 @@ void MainWindow::onDeleteClicked(){             //set delete statement selected
 
 void MainWindow::onGenerateClicked(){
 
+    onCheckedBox();
     dt->generate(this->getInputPath(), this->getOutputPath(), this->queryType);
 }
 
@@ -334,4 +338,20 @@ void MainWindow::onViewColumnClick(){
 
     cdui->setWindowTitle("Column List");
     cdui->show();
+}
+
+
+void MainWindow::onCheckedBox(){
+
+    bool checkedBox =  ui->checkBox->isChecked();
+    qDebug() << "MainWindow checkbox state: " << checkedBox;
+    try{
+
+        if(dt) dt->setFirstLine(checkedBox);
+        else throw dt;
+    } catch (...) {
+
+        ui->checkBox->setChecked(false);
+        qDebug() << "Please add a data source before select checkbox.";
+    }
 }

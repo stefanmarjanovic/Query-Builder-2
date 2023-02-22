@@ -6,10 +6,11 @@ Data::Data()
 {
 
     s = new Statements();
-    wordCounter = -1;
+    wordCounter = -1;       // no current selection
     lineCounter = -1;
-    querySelector = -1;             // no current selection
+    querySelector = -1;
     columnListSelected = 0;
+    firstLine = 0;
     _where = "";
 
 }
@@ -17,7 +18,6 @@ Data::Data()
 
 Data::~Data(){
 
-   //delete this;
 }
 
 
@@ -27,6 +27,8 @@ Data::~Data(){
  *  return true if the user has input column names
  */
 bool Data::checkColumnsSet(){
+
+    qDebug() << "Check Columns set: " << !columns.isEmpty();
 
     return !columns.isEmpty();
 }
@@ -41,13 +43,21 @@ bool Data::parseText(QString i){
 
     QFile dataFile(i);
     QTextStream read(&dataFile);
+    QByteArray line;
 
     if(dataFile.open(QFile::ReadOnly | QFile::Text)){
 
-        //read line into Class
+        //read lines into Class
         for(int i = 0; i < lineCounter; i++)
-        {
-            QByteArray line = dataFile.readLine();
+        {            
+            if(firstLine == true && i == 0) {                             //read first line and set as columns
+
+                line = dataFile.readLine();
+                getFirstLine(line);
+                continue;
+            }
+
+            line = dataFile.readLine();
             splitLine(line);
         }
 
@@ -62,7 +72,14 @@ bool Data::parseText(QString i){
         return false;
     }
 
-    return true;
+
+    for(int i =0; i < columns.size(); i++)
+    {
+       qDebug() << "Column " << i << ": " << columns[i] << "\n";
+    }
+    qDebug() << "############# MATRIX #############";
+    this->debugMatrix(matrix);
+   return true;
 }
 
 
@@ -93,13 +110,24 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
         switch(querySelector){
             case 1:
+                qDebug() << "Lines: " << lineCounter;
+                qDebug() << "Words: " << wordCounter;
+
+                // if check first line flag set adjust line & word counter
+                (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
+                (firstLine) ? (wordCounter = matrix[0].size()*matrix.size()) : wordCounter;
 
                 s->setWhere(this->getWhere());
-                s->updateStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet(), _tableName);
+                s->updateStatement(data, columns, file, matrix.size(), (matrix[0].size()*matrix.size()), checkColumnsSet(), _tableName);
 
                 break;
 
             case 2:
+
+                // if check first line flag set adjust line & word counter
+                (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
+                (firstLine) ? (wordCounter = matrix[0].size()*matrix.size()) : wordCounter;
+
 
                 s->setWhere(this->getWhere());
                 s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet(), _tableName);
@@ -108,12 +136,16 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
             case 3:
 
+                // if check first line flag set adjust line & word counter
+                (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
+                (firstLine) ? (wordCounter = matrix[0].size()*matrix.size()) : wordCounter;
+
                 s->setWhere(this->getWhere());
                 s->deleteStatement(data, file, lineCounter, getNextColumn(columnListSelected),columnListSelected, _tableName);
 
                 break;
         }
-        //  - /Users/Personal/Git/query-builder-2/suspects.txt
+        //  - /Users/Personal/Git/query-builder-2/dirtsheet.txt
 
 
         setAlert("File exported successfully.");
@@ -287,11 +319,14 @@ void Data::countLines(QTextStream *in){
 
     do
     {
+        if(firstLine == true && lineCounter == -1) continue;   //skip first line of columns
         line = in->readLine();
         lineCounter++;
 
     }
     while(!line.isNull());
+
+    if(firstLine == true) lineCounter--;
 }
 
 
@@ -310,7 +345,9 @@ void Data::countWords(QFile *dataFile){
         // split line into words and count words per line
         foreach(QString word, line.split(',')){
 
+            if(firstLine == true && wordCounter == -1) continue;   //skip first line of columns
             wordCounter++;
+
         }
 
     }
@@ -348,6 +385,37 @@ void  Data::debugMatrix(QVector<QList<QString>> matrix){
 void Data::getColumnIndex(int i){
 
     columnListSelected = i-1;
+}
+
+
+
+/*
+ *  GET FIRST LINE
+ *  Read the first line of data as columns
+ */
+void Data::getFirstLine(QByteArray line){
+
+    QString w;
+
+    foreach(QByteArray word, line.split(',')){
+
+        w = word;
+        columns.append(trimRegex(trim(w)));
+        qDebug() << w << "Added to column list";
+    }
+
+}
+
+
+
+/*
+ *  FIRST LINE
+ *  When active, this indicates the first line is to be parsed as column names
+ */
+void Data::setFirstLine(bool c){
+
+    qDebug() << "Data first line: " << c;
+    firstLine = c;
 }
 
 

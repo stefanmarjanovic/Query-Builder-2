@@ -55,6 +55,9 @@
      <height>191</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string extracomment="Select a column to be used in delete statement"/>
+   </property>
   </widget>
  </widget>
  <resources/>

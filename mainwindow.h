@@ -62,14 +62,7 @@ public slots:
     void onUpdateClicked();
     void onWhereSubmitted();
     void onViewColumnClick();
-
-
-
-
-
-signals:
-
-
+    void onCheckedBox();
 
 };
 #endif // QUERYBUILDER_H
