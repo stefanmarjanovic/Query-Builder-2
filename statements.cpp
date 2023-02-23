@@ -250,10 +250,10 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
 
         case 1:         //  columns defined
 
-            _insert = QString("INSERT INTO  ").append(table).append(" (");
+            _insert = QString("INSERT INTO  ").append(table).append(" (`");
             for(int i = 0; i < columns->size(); i++){
 
-                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += "`)\n") : _insert += (getColumn(columns, i) += "`,");
+                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += "`)\n") : _insert += (getColumn(columns, i) += "`,`");
 
             }
 

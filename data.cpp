@@ -41,7 +41,7 @@ bool Data::checkColumnsSet(){
  */
 bool Data::compareColumnSize(){
 
-    if(!firstLine && (columns.size() != getTotalWordsPerLine())) {
+    if(firstLine && (columns.size() != getTotalWordsPerLine())) {
 
         setAlert("Columns added do not match file columns in file.");
         return false;
@@ -89,13 +89,14 @@ bool Data::parseText(QString i){
         return false;
     }
 
-
+    /*
     for(int i =0; i < columns.size(); i++)
     {
        qDebug() << "Column " << i << ": " << columns[i] << "\n";
     }
     qDebug() << "############# MATRIX #############";
     this->debugMatrix(matrix);
+    */
    return true;
 }
 
@@ -130,6 +131,8 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
             case 1:
                 qDebug() << "Lines: " << lineCounter;
                 qDebug() << "Words: " << wordCounter;
+                qDebug() << "Write to file - table: " << _tableName;
+
 
                 // if check first line flag set adjust line & word counter
                 (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
@@ -262,7 +265,7 @@ QString Data::getWhere(){
 QString Data::getNextColumn(int i){
 
     QString col;
-    (!columns.empty()) ? (col = columns[i]) : (col =  "`column_name`");
+    (!columns.empty()) ? (col = columns[i]) : (col =  "column_name");
 
     return col;
 }
@@ -490,6 +493,8 @@ void Data::setTableName(QString s){
 
         _tableName = "`table_name`";
     }
+
+    qDebug() << "Data table name: " << _tableName;
 
 }
 
