@@ -19,6 +19,7 @@ public:
     Data();
     ~Data();
     bool checkColumnsSet();
+    bool compareColumnSize();
     bool parseText(QString i);
     bool generate(QString inputPath, QString outputPath, int queryOption);
     bool writeToFile(QVector<QList<QString>> data, QString outputPath, int queryOption);
@@ -43,7 +44,6 @@ public:
     void setTableName(QString s);
     void setWhere(QString s);
     void splitLine(QByteArray line);
-
 
 
 private:

@@ -312,7 +312,9 @@ void MainWindow::onGenerateClicked(){
 
     ui->inputPath->clear();
     ui->outputPath->clear();
+    ui->inputTableName->clear();
     ui->checkBox->setChecked(false);
+    cd.listWidget->clear();
     setButtonChecked(queryType);
 }
 

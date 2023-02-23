@@ -36,6 +36,23 @@ bool Data::checkColumnsSet(){
 
 
 /*
+ *  COMPARE COLUMN SIZE
+ *  Compares the user input columns to the amount of words per line in data source
+ */
+bool Data::compareColumnSize(){
+
+    if(!firstLine && (columns.size() != getTotalWordsPerLine())) {
+
+        setAlert("Columns added do not match file columns in file.");
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/*
  *  READ TEXT FILE
  *  Reads the text file & counts the words when the file path is added but does not trigger the output yet.
  */
@@ -118,6 +135,9 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
                 (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
                 (firstLine) ? (wordCounter = matrix[0].size()*matrix.size()) : wordCounter;
 
+                //if columns don't match do not continue;
+                if(!compareColumnSize()) return false;
+
                 s->setWhere(this->getWhere());
                 s->updateStatement(data, columns, file, matrix.size(), (matrix[0].size()*matrix.size()), checkColumnsSet(), _tableName);
 
@@ -125,10 +145,15 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
             case 2:
 
+                qDebug() << "Columns size: " << columns.size();
+                qDebug() << "Max Columns: " << (wordCounter/lineCounter);
+
                 // if check first line flag set adjust line & word counter
                 (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
                 (firstLine) ? (wordCounter = matrix[0].size()*matrix.size()) : wordCounter;
 
+                //if columns don't match do not continue;
+                if(!compareColumnSize()) return false;
 
                 s->setWhere(this->getWhere());
                 s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet(), _tableName);
@@ -141,6 +166,9 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
                 (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
                 (firstLine) ? (wordCounter = matrix[0].size()*matrix.size()) : wordCounter;
 
+                //if columns don't match do not continue;
+                if(!compareColumnSize()) return false;
+
                 s->setWhere(this->getWhere());
                 s->deleteStatement(data, file, lineCounter, getNextColumn(columnListSelected),columnListSelected, _tableName);
 
@@ -149,7 +177,7 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
         //  - /Users/Personal/Git/query-builder-2/dirtsheet.txt
 
 
-        setAlert("File exported successfully.");
+
     }
     else {
 
@@ -159,6 +187,7 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
         return false;
     }
 
+    setAlert("File exported successfully.");
     return true;
 }
 
@@ -414,16 +443,13 @@ void Data::getFirstLine(QByteArray line){
 void Data::reset(){
 
     matrix.clear();
-    wordCounter = -1;       // no current selection
+    columns.clear();
+    wordCounter = -1;
     lineCounter = -1;
     querySelector = -1;
     columnListSelected = 0;
     firstLine = 0;
     _where = "";
-
-     qDebug() << "Lines reset: " << lineCounter;
-     qDebug() << "Words reset: " << wordCounter;
-     qDebug() << "Matrix reset: " << matrix.size();
 }
 
 /*
