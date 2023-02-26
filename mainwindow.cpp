@@ -350,14 +350,38 @@ void MainWindow::onViewColumnClick(){
 void MainWindow::onCheckedBox(){
 
     bool checkedBox =  ui->checkBox->isChecked();
-    qDebug() << "MainWindow checkbox state: " << checkedBox;
-    try{
 
-        if(dt) dt->setFirstLine(checkedBox);
-        else throw dt;
-    } catch (...) {
+    switch(checkedBox){
+        case 0:
+        // enable columns button if checkbox ticked
+            ui->viewColBtn->setEnabled(true);
+            dt->clearColumnList();
+            cd.listWidget->clear();
 
-        ui->checkBox->setChecked(false);
-        qDebug() << "Please add a data source before select checkbox.";
+
+            //text has already been parse with first line checked, therefore we must reset data class and parse again
+            //in order to re-calculate number of lines and words
+            dt->reset();
+            if(dt) dt->setFirstLine(checkedBox);
+            dt->validateColumns(this->getInputPath());
+
+            break;
+
+        case 1:
+        // disable columns button if checked and parse first line
+            ui->viewColBtn->setEnabled(false);
+
+            try{
+
+                dt->clearColumnList();
+                if(dt) dt->setFirstLine(checkedBox);
+                else throw dt;
+
+            } catch (...) {
+
+                dt->setAlert("Please add a data source before select checkbox.");
+
+            }
+            break;
     }
 }

@@ -28,8 +28,6 @@ Data::~Data(){
  */
 bool Data::checkColumnsSet(){
 
-    qDebug() << "Check Columns set: " << !columns.isEmpty();
-
     return !columns.isEmpty();
 }
 
@@ -89,14 +87,6 @@ bool Data::parseText(QString i){
         return false;
     }
 
-    /*
-    for(int i =0; i < columns.size(); i++)
-    {
-       qDebug() << "Column " << i << ": " << columns[i] << "\n";
-    }
-    qDebug() << "############# MATRIX #############";
-    this->debugMatrix(matrix);
-    */
    return true;
 }
 
@@ -327,6 +317,8 @@ void Data::addColumnToList(QString c){
 void Data::clearColumnList(){
 
     columns.clear();
+
+    qDebug() << "Clear column list: " << columns.size();
 }
 
 
@@ -439,6 +431,15 @@ void Data::getFirstLine(QByteArray line){
 
 }
 
+void Data::printColumns(){
+
+    for(int i = 0; i < columns.size(); i++)
+    {
+
+        qDebug() << "Column " << i << ": " << columns[i];
+    }
+}
+
 /*
  *  RESET
  *  reset data class by running the constructor again
@@ -529,6 +530,3 @@ void Data::splitLine(QByteArray line){
 
     matrix.append(row);
 }
-
-
-

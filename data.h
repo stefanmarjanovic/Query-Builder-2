@@ -38,6 +38,7 @@ public:
     void debugMatrix(QVector<QList<QString>> data);
     void getColumnIndex(int i);
     void getFirstLine(QByteArray line);
+    void printColumns();
     void reset();
     void setAlert(QString s);
     void setFirstLine(bool c);
@@ -60,9 +61,6 @@ private:
     int lineCounter;
     int querySelector;
     int wordCounter;
-
-
-
 };
 
 #endif // DATA_H
