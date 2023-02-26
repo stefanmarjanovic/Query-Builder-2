@@ -119,10 +119,6 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
         switch(querySelector){
             case 1:
-                qDebug() << "Lines: " << lineCounter;
-                qDebug() << "Words: " << wordCounter;
-                qDebug() << "Write to file - table: " << _tableName;
-
 
                 // if check first line flag set adjust line & word counter
                 (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
@@ -137,9 +133,6 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
                 break;
 
             case 2:
-
-                qDebug() << "Columns size: " << columns.size();
-                qDebug() << "Max Columns: " << (wordCounter/lineCounter);
 
                 // if check first line flag set adjust line & word counter
                 (firstLine) ? (lineCounter = matrix.size()) : lineCounter;
@@ -317,8 +310,6 @@ void Data::addColumnToList(QString c){
 void Data::clearColumnList(){
 
     columns.clear();
-
-    qDebug() << "Clear column list: " << columns.size();
 }
 
 
@@ -426,7 +417,6 @@ void Data::getFirstLine(QByteArray line){
 
         w = word;
         columns.append(trimRegex(trim(w)));
-        qDebug() << w << "Added to column list";
     }
 
 }
@@ -462,7 +452,6 @@ void Data::reset(){
  */
 void Data::setFirstLine(bool c){
 
-    qDebug() << "Data first line: " << c;
     firstLine = c;
 }
 
@@ -494,8 +483,6 @@ void Data::setTableName(QString s){
 
         _tableName = "`table_name`";
     }
-
-    qDebug() << "Data table name: " << _tableName;
 
 }
 

@@ -213,8 +213,6 @@ QString Statements::selectStatement(){
 void Statements::clearWhere(){
 
     _where = "WHERE ";
-
-    qDebug() << "STATEMENT CLASS where: " << _where;
 }
 
 
