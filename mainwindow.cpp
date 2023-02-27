@@ -211,7 +211,7 @@ void MainWindow::addColumnToList(){
         dt->setAlert(QString("Cannot add more columns than").arg(totalColumns));
     }
 
-;}
+}
 
 
 void MainWindow::clearColumnToList(){
@@ -307,9 +307,9 @@ void MainWindow::onDeleteClicked(){             //set delete statement selected
 
 void MainWindow::onGenerateClicked(){
 
-    onCheckedBox();
     dt->generate(this->getInputPath(), this->getOutputPath(), this->queryType);
 
+    //reset mainwindow
     ui->inputPath->clear();
     ui->outputPath->clear();
     ui->inputTableName->clear();
@@ -361,9 +361,7 @@ void MainWindow::onCheckedBox(){
 
             //text has already been parse with first line checked, therefore we must reset data class and parse again
             //in order to re-calculate number of lines and words
-            dt->reset();
             if(dt) dt->setFirstLine(checkedBox);
-            dt->validateColumns(this->getInputPath());
 
             break;
 

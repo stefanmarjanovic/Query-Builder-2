@@ -114,7 +114,7 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
                     formatColumnsUpdate(&columns,o,columnsSet);
                     //IF First line                                                                                 //ELSE if not last word of row                                                                               // if last word of row
-                    (o == 0) ? (stream << "SET `" <<  _column << "` = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << ", ") : (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << "\n");
+                    (o == 0) ? (stream << "SET " <<  _column << " = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream  << _column << " = " << validateTextString(data[i][o]) << ", ") : (stream  << _column << " = " << validateTextString(data[i][o]) << "\n");
 
                 }
 
@@ -127,7 +127,7 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
                     formatColumnsUpdate(&columns,o,columnsSet);
                     //IF First line                                                                                 //ELSE if not last word of row                                                                               // if last word of row
-                    (o == 0) ? (stream << "SET `" <<  _column << "` = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << ", ") : (stream << "`" << _column << "` = " << validateTextString(data[i][o]) << ";\n");
+                    (o == 0) ? (stream << "SET " <<  _column << " = " << validateTextString(data[i][o]) << ", ") : (o != (wordCounter/(lineNumber)-1)) ? (stream << _column << " = " << validateTextString(data[i][o]) << ", ") : (stream  << _column << " = " << validateTextString(data[i][o]) << ";\n");
 
                 }
 
@@ -146,7 +146,7 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
 
 /*
  *  PRINT NEXT COLUMN
- *  prints the column at the index if it has been initialised, otherwise print the {column} placeholder
+ *  prints the column at the index if it has been initialised, otherwise print a column placeholder
  */
 QString Statements::getColumn(QVector<QString> *columns, int index){
 
@@ -248,10 +248,10 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
 
         case 1:         //  columns defined
 
-            _insert = QString("INSERT INTO  ").append(table).append(" (`");
+            _insert = QString("INSERT INTO  ").append(table).append(" (");
             for(int i = 0; i < columns->size(); i++){
 
-                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += "`)\n") : _insert += (getColumn(columns, i) += "`,`");
+                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += ")\n") : _insert += (getColumn(columns, i) += ",");
 
             }
 
@@ -278,7 +278,7 @@ void Statements::formatColumnsUpdate(QVector<QString> *columns, int index, bool 
 
     } catch(QString col){
 
-        qCritical() << "Columns uninstantiated" << col;
+        qCritical() << "Column uninstantiated" << col;
 
     }
 }

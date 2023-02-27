@@ -248,7 +248,7 @@ QString Data::getWhere(){
 QString Data::getNextColumn(int i){
 
     QString col;
-    (!columns.empty()) ? (col = columns[i]) : (col =  "column_name");
+    (!columns.empty()) ? (col = columns[i]) : (col =  "`column_name`");
 
     return col;
 }
@@ -296,7 +296,7 @@ int Data::getTotalWordsPerLine(){
  */
 void Data::addColumnToList(QString c){
 
-        QString col = c.prepend('`').append('`');
+       QString col = c.prepend('`').append('`');
 
        columns.append(col);
 }
@@ -416,7 +416,8 @@ void Data::getFirstLine(QByteArray line){
     foreach(QByteArray word, line.split(',')){
 
         w = word;
-        columns.append(trimRegex(trim(w)));
+
+        addColumnToList(trimRegex(trim(w)));
     }
 
 }
