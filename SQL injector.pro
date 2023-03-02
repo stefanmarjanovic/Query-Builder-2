@@ -4,6 +4,7 @@ QT += widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
+     app_bunble \
 
 RC_ICONS = icon.ico
 ICON = myapp.icns
@@ -21,7 +22,8 @@ SOURCES += \
 HEADERS += \
     data.h \
     mainwindow.h \
-    statements.h
+    statements.h \
+    ui_wherebox.h
 
 FORMS += \
     columnsdiag.ui \
