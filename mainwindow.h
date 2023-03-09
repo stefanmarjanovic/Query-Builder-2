@@ -43,6 +43,7 @@ private:
     QDialog *wui;
     QDialog *cdui;
     QInputDialog columnInput;
+    QMessageBox alert;
     QString inputFilename;
     QString outputFilename;
     int queryType;

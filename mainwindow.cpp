@@ -351,17 +351,35 @@ void MainWindow::onCheckedBox(){
 
     bool checkedBox =  ui->checkBox->isChecked();
 
+    qDebug() << "Checkbox called - status: " << checkedBox;
+
     switch(checkedBox){
         case 0:
         // enable columns button if checkbox ticked
-            ui->viewColBtn->setEnabled(true);
-            dt->clearColumnList();
-            cd.listWidget->clear();
+
+            try{
+
+                ui->viewColBtn->setEnabled(true);
+                cd.listWidget->clear();
 
 
-            //text has already been parse with first line checked, therefore we must reset data class and parse again
-            //in order to re-calculate number of lines and words
-            if(dt) dt->setFirstLine(checkedBox);
+                //text has already been parsed with first line checked, therefore we must reset data class and parse again
+                //in order to re-calculate number of lines and words
+                if(dt->validateFile(this->getInputPath())) {
+
+                    dt->setFirstLine(checkedBox);
+                    dt->clearColumnList();
+                    qDebug() << "Active File found";
+                } else throw dt;
+
+            } catch (...){
+
+                alert.setText("Please add a valid data source before select checkbox.");
+                alert.exec();
+                ui->viewColBtn->setEnabled(false);
+                ui->checkBox->setChecked(false);
+
+            }
 
             break;
 
@@ -371,15 +389,22 @@ void MainWindow::onCheckedBox(){
 
             try{
 
-                dt->clearColumnList();
-                if(dt) dt->setFirstLine(checkedBox);
-                else throw dt;
+                if(dt->validateFile(this->getInputPath())) {
+
+                    dt->clearColumnList();
+                    dt->setFirstLine(checkedBox);
+                    qDebug() << "Active File found";
+                } else throw dt;
 
             } catch (...) {
 
-                dt->setAlert("Please add a data source before select checkbox.");
+                alert.setText("Please add a valid data source before select checkbox.");
+                alert.exec();
+                ui->viewColBtn->setEnabled(false);
+                ui->checkBox->setChecked(false);
 
             }
             break;
     }
+
 }
