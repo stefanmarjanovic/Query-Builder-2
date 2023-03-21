@@ -66,4 +66,4 @@ public slots:
     void onCheckedBox();
 
 };
-#endif // QUERYBUILDER_H
+#endif // SQLINJECTOR_H
