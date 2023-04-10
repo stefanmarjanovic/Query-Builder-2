@@ -18,7 +18,7 @@ public:
 
     Data();
     ~Data();
-    bool checkColumnsSet();
+    bool checkColumnsIsSet();
     bool compareColumnSize();
     bool parseText(QString i);
     bool generate(QString inputPath, QString outputPath, int queryOption);

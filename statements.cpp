@@ -62,11 +62,15 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString>
     int wordsPerLine = (wordCounter/lineNumber);
 
     //pass columns names, index (not required), query type
-    formatColumnsInsert(&columns, columnsSet, wordsPerLine, _table);
-    stream << _insert;
+    //formatColumnsInsert(&columns, columnsSet, wordsPerLine, _table);
+    //stream << _insert;
 
     for(int i = 0; i < lineNumber; i++)
     {
+       //pass columns names, index (not required), query type
+       formatColumnsInsert(&columns, columnsSet, wordsPerLine, _table);
+       stream << _insert;
+
         stream << _value << " (";
         for(int o = 0; o < wordsPerLine; o++){
 
@@ -74,10 +78,10 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString>
             (o != (wordsPerLine)-1) ? (stream << validateTextString(data[i][o]) << ",") : (stream << validateTextString(data[i][o]));
         }
 
-        //print closing bracket and comma if not last line
-        (i == lineNumber-1) ? (stream << ")") : (stream << "),\n");
+        //print closing bracket and semi-colon if not last line
+        stream << ");\n";
     }
-    stream << ";\n\n";
+    stream << "\n";
 
     file.flush();
     file.close();

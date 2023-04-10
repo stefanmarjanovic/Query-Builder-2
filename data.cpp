@@ -26,7 +26,7 @@ Data::~Data(){
  *  CHECK COLUMNS SET
  *  return true if the user has input column names
  */
-bool Data::checkColumnsSet(){
+bool Data::checkColumnsIsSet(){
 
     return !columns.isEmpty();
 }
@@ -87,6 +87,8 @@ bool Data::parseText(QString i){
         return false;
     }
 
+
+   debugMatrix(matrix);
    return true;
 }
 
@@ -128,7 +130,7 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
                 if(!compareColumnSize()) return false;
 
                 s->setWhere(this->getWhere());
-                s->updateStatement(data, columns, file, matrix.size(), (matrix[0].size()*matrix.size()), checkColumnsSet(), _tableName);
+                s->updateStatement(data, columns, file, matrix.size(), (matrix[0].size()*matrix.size()), checkColumnsIsSet(), _tableName);
 
                 break;
 
@@ -142,7 +144,7 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
                 if(!compareColumnSize()) return false;
 
                 s->setWhere(this->getWhere());
-                s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsSet(), _tableName);
+                s->insertStatement(data, columns, file, lineCounter, wordCounter, checkColumnsIsSet(), _tableName);
 
                 break;
 
@@ -208,6 +210,9 @@ bool Data::validateColumns(QString s){
         qCritical() << "File not found";
         return false;
     }
+
+   qDebug() << "Line Counter: " << lineCounter;
+   qDebug() << "Word Counter: " << wordCounter;
 
     return true;
 }
@@ -418,6 +423,8 @@ void Data::getFirstLine(QByteArray line){
         w = word;
 
         addColumnToList(trimRegex(trim(w)));
+
+        qDebug() << "word: " << trimRegex(trim(w));
     }
 
 }
@@ -512,7 +519,15 @@ void Data::splitLine(QByteArray line){
     foreach(QByteArray word, line.split(',')){
 
         w = word;
-        row.append(trimRegex(trim(w)));
+
+        if(!w.isEmpty()){
+
+            row.append(trimRegex(trim(w)));
+        }
+        else{
+            row.append(w);
+        }
+
     }
 
 
