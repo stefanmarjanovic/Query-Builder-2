@@ -27,6 +27,7 @@ HEADERS += \
 FORMS += \
     columnsdiag.ui \
     mainwindow.ui \
+    table.ui \
     wherediag.ui
 
 ICON = icon.icns

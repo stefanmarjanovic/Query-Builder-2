@@ -76,3 +76,5 @@ sapusers.csv
 update-users.sql
 insert-users.sql
 dirtsheet.txt
+.qtc_clangd/compile_commands.json
+*.idx

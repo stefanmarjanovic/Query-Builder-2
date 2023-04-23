@@ -12,11 +12,16 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle("SQL Injector");
     this->setWindowIcon(QIcon(QPixmap(":icon.icns")));
 
-    //Dialog Box instantiation
+    //Interface class declaration
     wui = new QDialog();
     cdui = new QDialog();
+    vtui = new QDialog();
+    //Pass UI interface class
     cd.setupUi(cdui);
     wd.setupUi(wui);
+    tv.setupUi(vtui);
+
+    //No query type selected
     queryType = -1;
 
     //Disable buttons until text file is added
@@ -39,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->inputPath, &QLineEdit::editingFinished, this, &MainWindow::inputTextadded);
     QObject::connect(ui->inputTableName, &QLineEdit::editingFinished, this, &MainWindow::getTableName);
     QObject::connect(ui->checkBox, &QCheckBox::stateChanged, this, &MainWindow::onCheckedBox);
+    QObject::connect(ui->viewTableBtn, &QPushButton::clicked, this, &MainWindow::onViewTableClicked);
 }
 
 MainWindow::~MainWindow()
@@ -407,4 +413,10 @@ void MainWindow::onCheckedBox(){
             break;
     }
 
+}
+
+void MainWindow::onViewTableClicked(){
+
+    qDebug() << "View table button clicked";
+    vtui->open();
 }

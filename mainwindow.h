@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 
+#include "ui_table.h"
 #include "ui_wherebox.h"
 #include "ui_columnsdiag.h"
 #include "data.h"
@@ -12,6 +13,7 @@
 #include <QList>
 #include <QWidget>
 #include <QInputDialog>
+#include <QTableWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,13 +38,16 @@ public:
 
 private:
 
-    Ui::MainWindow *ui;
-    Ui::WhereDialog wd;
-    Ui::ColumnsDiag cd;
+    Ui::MainWindow *ui;                 // Main Window user interface
+    Ui::WhereDialog wd;                 // where clause dialog box
+    Ui::ColumnsDiag cd;                 // column dialog box
+    Ui::Table tv;                       // tableview user interface
     Data *dt;
     QDialog *wui;
     QDialog *cdui;
+    QDialog *vtui;
     QInputDialog columnInput;
+    QTableWidget viewTable;
     QMessageBox alert;
     QString inputFilename;
     QString outputFilename;
@@ -64,6 +69,7 @@ public slots:
     void onWhereSubmitted();
     void onViewColumnClick();
     void onCheckedBox();
+    void onViewTableClicked();
 
 };
 #endif // SQLINJECTOR_H

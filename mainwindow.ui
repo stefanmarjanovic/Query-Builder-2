@@ -211,10 +211,23 @@
      <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
-     <string>First Line columns:   </string>
+     <string>Parse Columns</string>
     </property>
     <property name="tristate">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="viewTableBtn">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>270</y>
+      <width>100</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>View Table</string>
     </property>
    </widget>
   </widget>
