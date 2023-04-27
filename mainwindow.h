@@ -27,10 +27,16 @@ public:
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    // String return types
     QString getOutputPath();
     QString getInputPath();
     QString trim(QString s);
+
+    // Integer return types
     int getSelection();
+
+    // Void types
     void resetButtons(bool active);
     void setWhereClause();
     void setButtonChecked(int querySelection);

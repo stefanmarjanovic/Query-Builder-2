@@ -261,7 +261,7 @@ QString Data::getNextColumn(int i){
 
 
 /*
- *  TRIME SPECIAL CHARACTERS
+ *  TRIM SPECIAL CHARACTERS
  *  remove trailing characters from each word and strip new line \n \r
  */
 QString Data::trimRegex(QString s){
@@ -532,4 +532,13 @@ void Data::splitLine(QByteArray line){
 
 
     matrix.append(row);
+}
+
+/*
+ *  PASS DATA
+ *  Pass data to view table in main window
+ */
+QVector<QList<QString>> Data::getDataMatrix(){
+
+    return matrix;
 }

@@ -12,13 +12,19 @@ public:
 
     Statements();
     ~Statements();
+
+    // Boolean return types
     bool deleteStatement(QVector<QList<QString>> &data, QFile &file, int lineNumber, QString column,int columnIndex, QString table);
     bool insertStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet, QString table);
     bool updateStatement(QVector<QList<QString>> &data, QVector<QString> &columns, QFile &file, int lineNumber, int wordCounter, bool isColSet, QString table);
+
+    // String return types
     QString getColumn(QVector<QString> *columns, int index);
     QString getWhere();
     QString validateTextString(QString w);
     QString selectStatement();
+
+    // Void types
     void clearWhere();
     void setWhere(QString s);
     void formatColumnsInsert(QVector<QString> *columns, bool columnsSet, int wordPerLine, QString table);

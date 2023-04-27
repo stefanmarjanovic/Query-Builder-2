@@ -18,6 +18,8 @@ public:
 
     Data();
     ~Data();
+
+    // Boolean return types
     bool checkColumnsIsSet();
     bool compareColumnSize();
     bool parseText(QString i);
@@ -25,11 +27,20 @@ public:
     bool writeToFile(QVector<QList<QString>> data, QString outputPath, int queryOption);
     bool validateColumns(QString s);
     bool validateFile(QString s);
+
+    // String return types
     QString getWhere();
     QString getNextColumn(int i);
     QString trimRegex(QString s);
     QString trim(QString s);
+
+    // QVector return types
+    QVector<QList<QString>> getDataMatrix();
+
+    // Integer return types
     int getTotalWordsPerLine();
+
+    // Void types
     void addColumnToList(QString c);
     void clearColumnList();
     void clearWhere();
@@ -47,6 +58,7 @@ public:
     void splitLine(QByteArray line);
 
 
+
 private:
 
     const char separator = ',';
@@ -61,6 +73,8 @@ private:
     int lineCounter;
     int querySelector;
     int wordCounter;
+
+
 };
 
 #endif // DATA_H

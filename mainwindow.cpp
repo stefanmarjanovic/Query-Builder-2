@@ -7,29 +7,30 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    //UI instantiation
+    // UI instantiation
     ui->setupUi(this);
     this->setWindowTitle("SQL Injector");
     this->setWindowIcon(QIcon(QPixmap(":icon.icns")));
 
-    //Interface class declaration
+    // Interface class declaration
     wui = new QDialog();
     cdui = new QDialog();
     vtui = new QDialog();
-    //Pass UI interface class
+
+    // Pass UI interface class
     cd.setupUi(cdui);
     wd.setupUi(wui);
     tv.setupUi(vtui);
 
-    //No query type selected
+    // No query type selected
     queryType = -1;
 
-    //Disable buttons until text file is added
+    // Disable buttons until text file is added
     ui->addWhereBtn->setEnabled(false);
     ui->submitBtn->setEnabled(false);
     ui->viewColBtn->setEnabled(false);
 
-    //Create connections between UI, slots & functions
+    // Create connections between UI, slots & functions
     QObject::connect(ui->submitBtn, &QPushButton::clicked, this, &MainWindow::onGenerateClicked);
     QObject::connect(ui->updateBtn, &QPushButton::clicked, this, &MainWindow::onUpdateClicked);
     QObject::connect(ui->insertBtn, &QPushButton::clicked, this, &MainWindow::onInsertClicked);
@@ -418,5 +419,20 @@ void MainWindow::onCheckedBox(){
 void MainWindow::onViewTableClicked(){
 
     qDebug() << "View table button clicked";
+    QVector<QList<QString>> data = dt->getDataMatrix();
+
+    qDebug() << "Matrix size: " << data.size();
+    for(int i = 0; i < data.size(); i++)
+    {
+            qDebug() << "Row " << i + 1 << ": " << data[i];
+
+            for(int o = 0; o < data[i].size(); o++){
+
+                qDebug() << "Column " << o + 1 << ": " << data[i][o];
+            }
+    }
+
+    exit(0);
+
     vtui->open();
 }
