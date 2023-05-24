@@ -38,7 +38,6 @@ bool Statements::deleteStatement(QVector<QList<QString>> &data, QFile &file, int
        stream << _where << " `" << column << "` = ";
        stream << validateTextString(data[i][columnIndex]) << ";\n\n";
     }
-    stream << "\n";
 
     file.flush();
     file.close();
@@ -71,7 +70,7 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString>
        formatColumnsInsert(&columns, columnsSet, wordsPerLine, _table);
        stream << _insert;
 
-        stream << _value << " (";
+        stream << _value << "(";
         for(int o = 0; o < wordsPerLine; o++){
 
             //if not last word in row add a comma
@@ -81,7 +80,6 @@ bool Statements::insertStatement(QVector<QList<QString>> &data, QVector<QString>
         //print closing bracket and semi-colon if not last line
         stream << ");\n";
     }
-    stream << "\n";
 
     file.flush();
     file.close();
@@ -139,7 +137,6 @@ bool Statements::updateStatement(QVector<QList<QString>> &data, QVector<QString>
                 break;
         }
     }
-    stream << "\n";
 
     file.flush();
     file.close();
@@ -242,20 +239,20 @@ void Statements::formatColumnsInsert(QVector<QString> *columns,bool columnsSet, 
     switch(columnsSet){
         case 0:         // columns undefined
 
-            _insert = QString("INSERT INTO  ").append(table).append(" (");
+            _insert = QString("INSERT INTO ").append(table).append(" (");
             for(int i = 0; i < wordPerLine; i++){
 
-                 (i == wordPerLine-1) ? _insert += "`column_name`)\n" : _insert += "`column_name`,";
+                 (i == wordPerLine-1) ? _insert += "`column_name`) " : _insert += "`column_name`,";
             }
 
             break;
 
         case 1:         //  columns defined
 
-            _insert = QString("INSERT INTO  ").append(table).append(" (");
+            _insert = QString("INSERT INTO ").append(table).append(" (");
             for(int i = 0; i < columns->size(); i++){
 
-                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += ")\n") : _insert += (getColumn(columns, i) += ",");
+                (i == columns->size()-1) ? _insert += (getColumn(columns, i) += ") ") : _insert += (getColumn(columns, i) += ",");
 
             }
 
