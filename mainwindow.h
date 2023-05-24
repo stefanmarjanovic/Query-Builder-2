@@ -58,6 +58,7 @@ private:
     QString inputFilename;
     QString outputFilename;
     int queryType;
+    int debugCounter;
 
 public slots:
 

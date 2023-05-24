@@ -100,6 +100,7 @@ bool Data::parseText(QString i){
 bool Data::generate(QString inputPath, QString outputPath, int queryOption){
 
     parseText(inputPath);
+
     writeToFile(matrix,outputPath,queryOption);
     this->reset();
 
@@ -162,9 +163,6 @@ bool Data::writeToFile(QVector<QList<QString>> data, QString outputPath, int que
 
                 break;
         }
-        //  - /Users/Personal/Git/query-builder-2/dirtsheet.txt
-
-
 
     }
     else {
@@ -229,6 +227,7 @@ bool Data::validateFile(QString s){
     QFile dataFile(inputfilepath);
     if(dataFile.open(QFile::ReadOnly | QFile::Text)) return true;
 
+    qDebug() << "validate file: false";
     return false;
 }
 

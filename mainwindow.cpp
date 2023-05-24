@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // No query type selected
     queryType = -1;
+    debugCounter = 0;
 
     // Disable buttons until text file is added
     ui->addWhereBtn->setEnabled(false);
@@ -356,62 +357,45 @@ void MainWindow::onViewColumnClick(){
 
 void MainWindow::onCheckedBox(){
 
-    bool checkedBox =  ui->checkBox->isChecked();
-
-    qDebug() << "Checkbox called - status: " << checkedBox;
+    bool checkedBox =  ui->checkBox->checkState();
+    qDebug() << "Checkbox status: " << checkedBox;
 
     switch(checkedBox){
         case 0:
-        // enable columns button if checkbox ticked
-
-            try{
-
-                ui->viewColBtn->setEnabled(true);
-                cd.listWidget->clear();
-
-
-                //text has already been parsed with first line checked, therefore we must reset data class and parse again
-                //in order to re-calculate number of lines and words
-                if(dt->validateFile(this->getInputPath())) {
-
-                    dt->setFirstLine(checkedBox);
-                    dt->clearColumnList();
-                    qDebug() << "Active File found";
-                } else throw dt;
-
-            } catch (...){
-
-                alert.setText("Please add a valid data source before selecting checkbox - ticked");
-                alert.exec();
-                ui->viewColBtn->setEnabled(false);
-                ui->checkBox->setChecked(false);
-
-            }
-
+            // enable columns button if checkbox is not active
+            ui->viewColBtn->setEnabled(true);
             break;
 
         case 1:
-        // disable columns button if checked and parse first line
+            // disable columns button if checkbox is active and parse first line
             ui->viewColBtn->setEnabled(false);
 
-            try{
+    }
 
-                if(dt->validateFile(this->getInputPath())) {
+    try{
+        cd.listWidget->clear();
 
-                    dt->clearColumnList();
-                    dt->setFirstLine(checkedBox);
-                    qDebug() << "Active File found";
-                } else throw dt;
+        if(dt->validateFile(this->getInputPath()) == true) {
 
-            } catch (...) {
+            dt->setFirstLine(checkedBox);
+            dt->clearColumnList();
+            qDebug() << "===============> Active File found";
 
-                alert.setText("Please add a valid data source before selecting checkbox - not ticked");
-                alert.exec();
-                ui->viewColBtn->setEnabled(false);
-                ui->checkBox->setChecked(false);
+        } else {
 
-            }
-            break;
+            throw dt;
+        }
+
+    } catch (...){
+
+        alert.setText("Please add a valid data source before selecting checkbox");
+        alert.exec();
+        qDebug() << "Checkbox status: " << checkedBox;
+        qDebug() << "Debug Counter:" << debugCounter;
+        debugCounter++;
+
+        ui->viewColBtn->setEnabled(false);
+        ui->checkBox->setCheckState(Qt::Unchecked);
     }
 
 }
