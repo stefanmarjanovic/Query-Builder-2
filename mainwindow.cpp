@@ -15,12 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
     // Interface class declaration
     wui = new QDialog();
     cdui = new QDialog();
-    vtui = new QDialog();
+    //vtui = new QDialog();
 
     // Pass UI interface class
     cd.setupUi(cdui);
     wd.setupUi(wui);
-    tv.setupUi(vtui);
+    //tv.setupUi(vtui);
 
     // No query type selected
     queryType = -1;
@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->inputPath, &QLineEdit::editingFinished, this, &MainWindow::inputTextadded);
     QObject::connect(ui->inputTableName, &QLineEdit::editingFinished, this, &MainWindow::getTableName);
     QObject::connect(ui->checkBox, &QCheckBox::stateChanged, this, &MainWindow::onCheckedBox);
-    QObject::connect(ui->viewTableBtn, &QPushButton::clicked, this, &MainWindow::onViewTableClicked);
+    //QObject::connect(ui->viewTableBtn, &QPushButton::clicked, this, &MainWindow::onViewTableClicked);
 }
 
 MainWindow::~MainWindow()
@@ -381,7 +381,7 @@ void MainWindow::onCheckedBox(){
 
             } catch (...){
 
-                alert.setText("Please add a valid data source before select checkbox.");
+                alert.setText("Please add a valid data source before selecting checkbox - ticked");
                 alert.exec();
                 ui->viewColBtn->setEnabled(false);
                 ui->checkBox->setChecked(false);
@@ -405,7 +405,7 @@ void MainWindow::onCheckedBox(){
 
             } catch (...) {
 
-                alert.setText("Please add a valid data source before select checkbox.");
+                alert.setText("Please add a valid data source before selecting checkbox - not ticked");
                 alert.exec();
                 ui->viewColBtn->setEnabled(false);
                 ui->checkBox->setChecked(false);
@@ -415,7 +415,7 @@ void MainWindow::onCheckedBox(){
     }
 
 }
-
+/*
 void MainWindow::onViewTableClicked(){
 
     qDebug() << "View table button clicked";
@@ -434,5 +434,6 @@ void MainWindow::onViewTableClicked(){
 
     exit(0);
 
-    vtui->open();
+   // vtui->open();
 }
+*/

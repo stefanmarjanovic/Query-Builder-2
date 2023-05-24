@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 
-#include "ui_table.h"
+//#include "ui_table.h"
 #include "ui_wherebox.h"
 #include "ui_columnsdiag.h"
 #include "data.h"
@@ -47,11 +47,11 @@ private:
     Ui::MainWindow *ui;                 // Main Window user interface
     Ui::WhereDialog wd;                 // where clause dialog box
     Ui::ColumnsDiag cd;                 // column dialog box
-    Ui::Table tv;                       // tableview user interface
+    //Ui::Table tv;                       // tableview user interface
     Data *dt;
     QDialog *wui;
     QDialog *cdui;
-    QDialog *vtui;
+    //QDialog *vtui;
     QInputDialog columnInput;
     QTableWidget viewTable;
     QMessageBox alert;
@@ -75,7 +75,7 @@ public slots:
     void onWhereSubmitted();
     void onViewColumnClick();
     void onCheckedBox();
-    void onViewTableClicked();
+    //void onViewTableClicked();
 
 };
 #endif // SQLINJECTOR_H
