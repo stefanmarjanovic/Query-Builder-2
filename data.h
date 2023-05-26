@@ -24,9 +24,11 @@ public:
     bool compareColumnSize();
     bool parseText(QString i);
     bool generate(QString inputPath, QString outputPath, int queryOption);
+    bool getFirstLine();
     bool writeToFile(QVector<QList<QString>> data, QString outputPath, int queryOption);
     bool validateColumns(QString s);
     bool validateFile(QString s);
+
 
     // String return types
     QString getWhere();
@@ -48,7 +50,7 @@ public:
     void countWords(QFile *dataFile);
     void debugMatrix(QVector<QList<QString>> data);
     void getColumnIndex(int i);
-    void getFirstLine(QByteArray line);
+    void parseFirstLine(QByteArray line);
     void printColumns();
     void reset();
     void setAlert(QString s);

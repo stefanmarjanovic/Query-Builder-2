@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->addWhereBtn->setEnabled(false);
     ui->submitBtn->setEnabled(false);
     ui->viewColBtn->setEnabled(false);
+    ui->checkBox->setCheckable(0);
 
     // Create connections between UI, slots & functions
     QObject::connect(ui->submitBtn, &QPushButton::clicked, this, &MainWindow::onGenerateClicked);
@@ -263,6 +264,10 @@ void MainWindow::inputTextadded(){
                 //set buttons unavailable
                 resetButtons(i);
 
+                // disable and reset first line checkbox
+                ui->checkBox->setCheckable(0);
+                ui->checkBox->setChecked(0);
+
                 throw(this->getInputPath());
 
                 break;
@@ -276,10 +281,11 @@ void MainWindow::inputTextadded(){
                 dt = new Data();
                 dt->validateColumns(this->getInputPath());
 
-
-                // setButtonChecked(queryType);
                 // set buttons available
                 resetButtons(i);
+
+                // enable first line checkbox
+                ui->checkBox->setCheckable(1);
 
                 break;
         }
@@ -321,7 +327,6 @@ void MainWindow::onGenerateClicked(){
     ui->inputPath->clear();
     ui->outputPath->clear();
     ui->inputTableName->clear();
-    ui->checkBox->setChecked(false);
     cd.listWidget->clear();
     setButtonChecked(queryType);
 }
@@ -369,6 +374,7 @@ void MainWindow::onCheckedBox(){
         case 1:
             // disable columns button if checkbox is active and parse first line
             ui->viewColBtn->setEnabled(false);
+            break;
 
     }
 
@@ -379,7 +385,7 @@ void MainWindow::onCheckedBox(){
 
             dt->setFirstLine(checkedBox);
             dt->clearColumnList();
-            qDebug() << "===============> Active File found";
+            qDebug() << "Active File found";
 
         } else {
 
@@ -392,13 +398,13 @@ void MainWindow::onCheckedBox(){
         alert.exec();
         qDebug() << "Checkbox status: " << checkedBox;
         qDebug() << "Debug Counter:" << debugCounter;
+        qDebug() << "First line active: " << dt->getFirstLine();
         debugCounter++;
-
         ui->viewColBtn->setEnabled(false);
-        ui->checkBox->setCheckState(Qt::Unchecked);
     }
 
 }
+
 /*
 void MainWindow::onViewTableClicked(){
 

@@ -12,7 +12,6 @@ Data::Data()
     columnListSelected = 0;
     firstLine = 0;
     _where = "";
-
 }
 
 
@@ -68,7 +67,7 @@ bool Data::parseText(QString i){
             if(firstLine == true && i == 0) {                             //read first line and set as columns
 
                 line = dataFile.readLine();
-                getFirstLine(line);
+                parseFirstLine(line);
                 continue;
             }
 
@@ -107,6 +106,14 @@ bool Data::generate(QString inputPath, QString outputPath, int queryOption){
     return true;
 }
 
+/*
+ *  GET FIRST LINE
+ *  check whether the first line boolean is active
+ */
+bool Data::getFirstLine(){
+
+    return firstLine;
+}
 
 
 /*
@@ -413,7 +420,7 @@ void Data::getColumnIndex(int i){
  *  GET FIRST LINE
  *  Read the first line of data as columns
  */
-void Data::getFirstLine(QByteArray line){
+void Data::parseFirstLine(QByteArray line){
 
     QString w;
 
